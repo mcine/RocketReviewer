@@ -3,11 +3,15 @@
 
 This is fully vibe-coded, so if you do not like AI-SLOB, this is not for you ..
 
+![RocketReviewer](images/rocketreviewer.png)
+
 An automated poker hand history review suite and interactive replayer with live **RocketSolver** GTO verification.
 
 Supports importing hand histories from **888poker**, **CoinPoker**, and **GGPoker**,  stepping action-by-action through solver trees, and highlighting tactical mistakes in a modern web dashboard.
 
 I have only tested 6max tables cashgames..
+
+I use this to check my sessions hand histories and review hands
 
 ##how to use
 1. Install Rocketreviewer
@@ -37,9 +41,7 @@ I have only tested 6max tables cashgames..
 
 ### 1. Clone or Open the Repository
 Ensure you are in the project folder:
-```powershell
-cd C:\misc\code\appautomation
-```
+
 
 ### 2. Install Python Dependencies
 Install all required dependencies (`Pillow`, `uiautomation`) using `requirements.txt`:

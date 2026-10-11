@@ -1,6 +1,7 @@
+from pathlib import Path
 from PIL import Image
 
-img = Image.open(r"c:\misc\code\appautomation\table_crop.png")
+img = Image.open(Path(__file__).resolve().parent / "table_crop.png")
 # BU badge is green: find green pixels in table_crop
 bu_pixels = []
 for y in range(img.height):

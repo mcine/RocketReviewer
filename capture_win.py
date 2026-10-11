@@ -17,7 +17,8 @@ if not win.Exists(maxSearchSeconds=3):
 rect = win.BoundingRectangle
 print("Window rect:", rect)
 
+from pathlib import Path
 # Capture to image
-img_path = r"c:\misc\code\appautomation\rocketsolver_current.png"
+img_path = str(Path(__file__).resolve().parent / "rocketsolver_current.png")
 win.CaptureToImage(img_path)
 print("Saved screenshot to:", img_path)

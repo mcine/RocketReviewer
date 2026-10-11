@@ -1,6 +1,7 @@
+from pathlib import Path
 from PIL import Image
 
-img = Image.open(r"c:\misc\code\appautomation\left_menu.png")
+img = Image.open(Path(__file__).resolve().parent / "left_menu.png")
 # Let's inspect rows around y=180 to 280
 green_pixels = []
 for y in range(160, 300):

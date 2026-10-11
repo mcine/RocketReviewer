@@ -22,7 +22,8 @@ user32.ShowWindow(hwnd, 9) # SW_RESTORE = 9
 user32.SetForegroundWindow(hwnd)
 time.sleep(1)
 
+from pathlib import Path
 # Now capture screenshot
-img_path = r"c:\misc\code\appautomation\rocketsolver_front.png"
+img_path = str(Path(__file__).resolve().parent / "rocketsolver_front.png")
 win.CaptureToImage(img_path)
 print("Saved screenshot to:", img_path)

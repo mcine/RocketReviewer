@@ -116,6 +116,6 @@ bmi.biCompression = 0
 buf = ctypes.create_string_buffer(w * h * 4)
 gdi32.GetDIBits(hdc_mem, hbm, 0, h, buf, ctypes.byref(bmi), 0)
 
-im = Image.frombuffer('RGBA', (w, h), buf, 'raw', 'BGRA', 0, 1)
-im.save(r"c:\misc\code\appautomation\strategy_tab_view2.png")
+from pathlib import Path
+im.save(str(Path(__file__).resolve().parent / "strategy_tab_view2.png"))
 print("Saved strategy_tab_view2.png")

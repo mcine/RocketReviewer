@@ -1,6 +1,7 @@
+from pathlib import Path
 from PIL import Image
 
-img = Image.open(r"c:\misc\code\appautomation\strategy_tab_view2.png")
+img = Image.open(Path(__file__).resolve().parent / "strategy_tab_view2.png")
 # Scan lower right: x from 1400 to 1800, y from 1000 to 1350
 bu_ev_pixels = []
 for y in range(1000, 1350):

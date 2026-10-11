@@ -1,11 +1,13 @@
+from pathlib import Path
 from PIL import Image
 
-img = Image.open(r"c:\misc\code\appautomation\strategy_tab_view.png")
+BASE_DIR = Path(__file__).resolve().parent
+img = Image.open(BASE_DIR / "strategy_tab_view.png")
 print("Size:", img.size)
 
 # Crop the left menu bar from x=0 to 80, y=0 to 300
 crop = img.crop((0, 0, 80, 300))
-crop.save(r"c:\misc\code\appautomation\left_menu.png")
+crop.save(BASE_DIR / "left_menu.png")
 
 # Let's inspect the green Tree icon vs Strategy icon
 # Where is Tree icon?
