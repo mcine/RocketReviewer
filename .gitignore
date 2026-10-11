@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+#RocketReviewer
+@AutomationLog.txt
+converted_hands/*

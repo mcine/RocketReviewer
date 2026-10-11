@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poker Hand Reviewer & RocketSolver GTO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f19;
+      color: #e2e8f0;
+      user-select: none;
+    }
+    .mono { font-family: 'JetBrains+Mono', monospace; }
+
+    /* Poker table styling */
+    .poker-table-outer {
+      background: radial-gradient(circle, #2d3748 0%, #1a202c 100%);
+      border: 14px solid #1e293b;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.9), 0 10px 30px rgba(0,0,0,0.7);
+      border-radius: 200px;
+      position: relative;
+    }
+    .poker-table-felt {
+      background: radial-gradient(ellipse at center, #1b4d3e 0%, #0e2e24 70%, #081d17 100%);
+      box-shadow: inset 0 0 35px rgba(0,0,0,0.85);
+      border-radius: 185px;
+      border: 3px solid rgba(255,255,255,0.08);
+      position: relative;
+    }
+
+    /* 4-color deck */
+    .card-s { color: #1e293b; background: #ffffff; } /* Spades: black */
+    .card-h { color: #dc2626; background: #ffffff; } /* Hearts: red */
+    .card-d { color: #2563eb; background: #ffffff; } /* Diamonds: blue */
+    .card-c { color: #16a34a; background: #ffffff; } /* Clubs: green */
+    .card-back {
+      background: repeating-linear-gradient(135deg, #1e3a8a, #1e3a8a 5px, #1e40af 5px, #1e40af 10px);
+      border: 1.5px solid #cbd5e1;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Drag and drop active state */
+    .drag-over {
+      border-color: #14b8a6 !important;
+      background-color: rgba(20, 184, 166, 0.1) !important;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    /* Speech Bubble Animations and Styling */
+    @keyframes speechBubblePop {
+      0% { transform: scale(0.6) translateY(6px); opacity: 0; }
+      75% { transform: scale(1.08) translateY(-2px); opacity: 1; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    @keyframes speechGlowAllIn {
+      0% { box-shadow: 0 0 10px rgba(192, 132, 252, 0.4); }
+      100% { box-shadow: 0 0 25px rgba(192, 132, 252, 0.9); }
+    }
+
+    .speech-bubble-wrapper {
+      position: absolute;
+      z-index: 50;
+      display: flex;
+      pointer-events: none;
+      animation: speechBubblePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6));
+    }
+
+    .speech-bubble-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 13px;
+      border-radius: 9999px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Positioning relative to seat */
+    .bubble-pos-top {
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      flex-direction: column;
+      align-items: center;
+    }
+    .bubble-pos-bottom {
+      top: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      flex-direction: column;
+      align-items: center;
+    }
+    .bubble-pos-right {
+      left: calc(100% + 14px);
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: row;
+      align-items: center;
+    }
+    .bubble-pos-left {
+      right: calc(100% + 14px);
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: row-reverse;
+      align-items: center;
+    }
+    .bubble-pos-top-right {
+      left: calc(100% + 8px);
+      top: 25%;
+      flex-direction: row;
+      align-items: center;
+    }
+    .bubble-pos-top-left {
+      right: calc(100% + 8px);
+      top: 25%;
+      flex-direction: row-reverse;
+      align-items: center;
+    }
+
+    .tail-svg-down { margin-top: -1px; }
+    .tail-svg-up { margin-bottom: -1px; order: -1; }
+    .tail-svg-left { margin-right: -1px; order: -1; }
+    .tail-svg-right { margin-left: -1px; order: -1; }
+
+    /* Action Bubble Themes */
+    .bubble-type-fold {
+      background: linear-gradient(135deg, rgba(69, 10, 10, 0.96), rgba(28, 25, 23, 0.96));
+      border: 1.5px solid #ef4444;
+      color: #fecaca;
+    }
+    .bubble-type-check {
+      background: linear-gradient(135deg, rgba(8, 47, 73, 0.96), rgba(15, 23, 42, 0.96));
+      border: 1.5px solid #38bdf8;
+      color: #bae6fd;
+    }
+    .bubble-type-call {
+      background: linear-gradient(135deg, rgba(6, 78, 59, 0.96), rgba(15, 23, 42, 0.96));
+      border: 1.5px solid #10b981;
+      color: #a7f3d0;
+    }
+    .bubble-type-bet {
+      background: linear-gradient(135deg, rgba(120, 53, 15, 0.96), rgba(28, 25, 23, 0.96));
+      border: 1.5px solid #f59e0b;
+      color: #fef08a;
+    }
+    .bubble-type-raise {
+      background: linear-gradient(135deg, rgba(124, 45, 18, 0.96), rgba(69, 10, 10, 0.96));
+      border: 1.5px solid #f97316;
+      color: #ffedd5;
+    }
+    .bubble-type-all_in {
+      background: linear-gradient(135deg, rgba(88, 28, 135, 0.98), rgba(59, 7, 100, 0.98));
+      border: 2px solid #c084fc;
+      color: #faf5ff;
+      animation: speechGlowAllIn 1.2s infinite alternate;
+    }
+    .bubble-type-win {
+      background: linear-gradient(135deg, rgba(113, 63, 18, 0.96), rgba(20, 83, 45, 0.96));
+      border: 1.5px solid #eab308;
+      color: #fef9c3;
+    }
+    .bubble-type-blind {
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.96), rgba(15, 23, 42, 0.96));
+      border: 1.5px solid #818cf8;
+      color: #e0e7ff;
+    }
+
+    /* Street Badges & Highlights - BOLD, ALL CAPS, DIFFERENT COLORS */
+    .street-badge-preflop {
+      background: rgba(14, 165, 233, 0.22);
+      color: #38bdf8;
+      border: 1.5px solid #0284c7;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .street-badge-flop {
+      background: rgba(16, 185, 129, 0.22);
+      color: #34d399;
+      border: 1.5px solid #059669;
+      box-shadow: 0 0 10px rgba(52, 211, 153, 0.35);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .street-badge-turn {
+      background: rgba(245, 158, 11, 0.22);
+      color: #fbbf24;
+      border: 1.5px solid #d97706;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .street-badge-river {
+      background: rgba(244, 63, 94, 0.22);
+      color: #fb7185;
+      border: 1.5px solid #e11d48;
+      box-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .street-badge-showdown {
+      background: rgba(168, 85, 247, 0.22);
+      color: #c084fc;
+      border: 1.5px solid #9333ea;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.35);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Inline street mentions inside explanation text */
+    .street-inline-preflop {
+      font-weight: 900;
+      color: #38bdf8;
+      background: rgba(14, 165, 233, 0.18);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      padding: 1px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .street-inline-flop {
+      font-weight: 900;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      padding: 1px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .street-inline-turn {
+      font-weight: 900;
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.18);
+      border: 1px solid rgba(251, 191, 36, 0.45);
+      padding: 1px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .street-inline-river {
+      font-weight: 900;
+      color: #fb7185;
+      background: rgba(244, 63, 94, 0.18);
+      border: 1px solid rgba(251, 113, 133, 0.45);
+      padding: 1px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .street-inline-showdown {
+      font-weight: 900;
+      color: #c084fc;
+      background: rgba(168, 85, 247, 0.18);
+      border: 1px solid rgba(192, 132, 252, 0.45);
+      padding: 1px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden bg-slate-950">
+
+  <!-- Top Navigation Bar -->
+  <header class="h-16 border-b border-slate-800 bg-slate-900/80 px-6 flex items-center justify-between z-20 backdrop-blur-md">
+    <div class="flex items-center space-x-4">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 font-bold text-xl">
+        <i class="fa-solid fa-shapes"></i>
+      </div>
+      <div>
+        <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+          Poker Hand Reviewer
+          <span class="text-xs px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-400 font-semibold border border-teal-500/30">
+            RocketSolver Background Mode
+          </span>
+        </h1>
+        <p class="text-xs text-slate-400">888poker, GGPoker & CoinPoker with RocketSolver GTO Range Verification</p>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center space-x-3">
+      <button id="btnRunSolver" onclick="runSolverVerification()" class="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium text-xs rounded-lg shadow-md shadow-emerald-900/30 flex items-center gap-2 transition-all" title="Run RocketSolver verification on all filtered hands">
+        <i class="fa-solid fa-robot"></i>
+        <span id="btnRunSolverText">Run RocketSolver Check</span>
+        <span id="btnRunSolverBadge" class="hidden px-1.5 py-0.5 rounded bg-black/40 text-[10px] mono font-bold border border-emerald-400/40"></span>
+      </button>
+
+      <button id="btnReviewSingleHeader" onclick="reviewCurrentHand()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-white text-xs font-semibold rounded-lg border border-teal-500/30 flex items-center gap-2 transition-all" title="Review only the currently selected hand with RocketSolver">
+        <i class="fa-solid fa-crosshairs text-teal-400"></i>
+        <span>Review This Hand</span>
+      </button>
+
+      <button onclick="openUploadModal()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-lg border border-slate-700 flex items-center gap-2 transition-all">
+        <i class="fa-solid fa-cloud-arrow-up text-teal-400"></i>
+        <span>Upload Hand Histories</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Live Progress Bar (hidden when idle) -->
+  <div id="progressBarContainer" class="hidden bg-slate-900/90 border-b border-slate-800 px-6 py-2.5 z-20 flex items-center justify-between text-xs transition-all">
+    <div class="flex items-center gap-3 flex-1 mr-6">
+      <i class="fa-solid fa-spinner fa-spin text-teal-400"></i>
+      <span id="progressMessage" class="text-slate-300 font-medium truncate">Analyzing hands...</span>
+      <div class="flex-1 bg-slate-800 h-2 rounded-full overflow-hidden ml-2 max-w-md">
+        <div id="progressBarFill" class="bg-gradient-to-r from-teal-500 to-emerald-400 h-full w-0 transition-all duration-300"></div>
+      </div>
+      <span id="progressPctText" class="mono font-bold text-teal-400">0%</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-[11px] text-slate-500 hidden md:inline">Non-intrusive: safe to switch active windows</span>
+      <button id="btnCancelSolver" onclick="cancelSolverCheck()" class="px-3 py-1 bg-rose-600/90 hover:bg-rose-500 active:scale-95 text-white font-bold text-xs rounded-lg border border-rose-400/50 flex items-center gap-1.5 transition-all shadow-md shadow-rose-950/40" title="Cancel ongoing RocketSolver operation (or press Esc)">
+        <i class="fa-solid fa-circle-stop"></i>
+        <span>Cancel</span>
+        <kbd class="px-1.5 py-0.5 rounded bg-black/40 text-[9px] font-mono border border-white/20">Esc</kbd>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Workspace -->
+  <div class="flex-1 flex overflow-hidden">
+
+    <!-- Left Sidebar: Hand History List -->
+    <aside class="w-80 border-r border-slate-800/80 bg-slate-900/60 flex flex-col">
+      <div class="p-3 border-b border-slate-800 space-y-2.5">
+        <div class="grid grid-cols-4 gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-[11px]">
+          <button id="tabFilterAll" onclick="setFilter('all')" class="py-1.5 rounded-md font-bold text-center bg-slate-800 text-white transition-all" title="All Hands">
+            All (<span id="countAll">0</span>)
+          </button>
+          <button id="tabFilterReview" onclick="setFilter('review')" class="py-1.5 rounded-md font-medium text-center text-slate-400 hover:text-amber-400 transition-all" title="Marked for Review">
+            ⚠️ Review (<span id="countReview">0</span>)
+          </button>
+          <button id="tabFilterGTO" onclick="setFilter('gto_ok')" class="py-1.5 rounded-md font-medium text-center text-slate-400 hover:text-emerald-400 transition-all" title="GTO OK">
+            ✅ GTO (<span id="countGTO">0</span>)
+          </button>
+          <button id="tabFilterNotReviewed" onclick="setFilter('not_reviewed')" class="py-1.5 rounded-md font-medium text-center text-slate-400 hover:text-slate-200 transition-all" title="Not Reviewed">
+            ⏳ Unchecked (<span id="countNotReviewed">0</span>)
+          </button>
+        </div>
+
+        <!-- Hero Won / Lost Filter Control -->
+        <div class="bg-slate-950/90 p-2.5 rounded-xl border border-slate-800 space-y-2 shadow-inner">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="text-slate-300 font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-scale-balanced text-emerald-400"></i>
+              <span>Hero Won / Lost Filter</span>
+            </span>
+            <span id="heroNetFilterSummary" class="text-[10px] text-slate-400 mono font-semibold">
+              All Hands
+            </span>
+          </div>
+
+          <!-- Mode Toggle: Won or Lost (default), Lost Only, Won Only -->
+          <div class="grid grid-cols-3 gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-800 text-[10px]">
+            <button id="netModeAny" onclick="setNetMode('any')" class="py-1 rounded font-bold text-center bg-slate-800 text-teal-300 transition-all" title="Filter by amount Hero won OR lost (absolute value)">
+              ± Won / Lost
+            </button>
+            <button id="netModeLoss" onclick="setNetMode('loss')" class="py-1 rounded font-medium text-center text-slate-400 hover:text-rose-400 transition-all" title="Filter to hands where Hero lost at least this amount">
+              🔻 Lost Only
+            </button>
+            <button id="netModeWin" onclick="setNetMode('win')" class="py-1 rounded font-medium text-center text-slate-400 hover:text-emerald-400 transition-all" title="Filter to hands where Hero won at least this amount">
+              💰 Won Only
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <div class="relative flex-1">
+              <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-bold">$</span>
+              <input
+                type="number"
+                id="minHeroNetInput"
+                step="0.5"
+                min="0"
+                placeholder="0.00"
+                value=""
+                oninput="onMinHeroNetInputChange(this.value)"
+                class="w-full bg-slate-900 text-white text-xs pl-6 pr-2 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-teal-400 mono font-semibold"
+                title="Filter hands by how much Hero won or lost (e.g. $2)"
+              />
+            </div>
+            <button
+              id="btnClearHeroNetFilter"
+              onclick="clearHeroNetFilter()"
+              class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 text-[11px] font-medium border border-slate-700 transition-colors"
+              title="Reset filter to show all hands"
+            >
+              Reset
+            </button>
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="flex items-center gap-1 text-[10px]">
+            <span class="text-slate-400 font-medium mr-0.5">Quick:</span>
+            <button id="netPresetBtn0" onclick="setHeroNetPreset(0)" class="net-preset-btn px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold" data-val="0">All</button>
+            <button id="netPresetBtn05" onclick="setHeroNetPreset(0.5)" class="net-preset-btn px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-emerald-400 border border-slate-700 font-medium" data-val="0.5">≥$0.50</button>
+            <button id="netPresetBtn1" onclick="setHeroNetPreset(1)" class="net-preset-btn px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-emerald-400 border border-slate-700 font-medium" data-val="1">≥$1</button>
+            <button id="netPresetBtn2" onclick="setHeroNetPreset(2)" class="net-preset-btn px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-emerald-400 border border-slate-700 font-medium" data-val="2">≥$2</button>
+            <button id="netPresetBtn5" onclick="setHeroNetPreset(5)" class="net-preset-btn px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-emerald-400 border border-slate-700 font-medium" data-val="5">≥$5</button>
+          </div>
+
+          <!-- Filter Info stats line -->
+          <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-800/80">
+            <span id="heroNetFilterMatchCount">Showing all hands</span>
+            <span id="heroNetFilterUncheckedCount" class="text-amber-400 font-medium">0 unchecked</span>
+          </div>
+        </div>
+
+        <!-- Sort Control -->
+        <div class="flex items-center justify-between gap-1.5 text-[11px] bg-slate-950/80 px-2 py-1.5 rounded-lg border border-slate-800">
+          <span class="text-slate-400 flex items-center gap-1 font-semibold shrink-0">
+            <i class="fa-solid fa-arrow-down-wide-short text-teal-400 text-[10px]"></i>
+            <span>Sort:</span>
+          </span>
+          <select id="handSortSelect" onchange="setSort(this.value)" class="bg-slate-900 text-slate-200 text-xs border border-slate-700/80 rounded px-1.5 py-0.5 focus:outline-none focus:border-teal-400 cursor-pointer flex-1 min-w-0">
+            <option value="default">Default (Session)</option>
+            <option value="impact_desc">⚡ Hero Impact (|Won/Lost| Largest First)</option>
+            <option value="won_asc">🔻 Won (-$$$ Losses First)</option>
+            <option value="won_desc">💰 Won (+$$$ Wins First)</option>
+            <option value="pot_desc">🏺 Pot Size (Largest Pots First)</option>
+            <option value="pot_asc">🏺 Pot Size (Smallest Pots First)</option>
+            <option value="street_asc">🏷️ Street (Preflop → River)</option>
+            <option value="street_desc">🏷️ Street (River → Preflop)</option>
+          </select>
+        </div>
+
+        <div class="flex justify-between items-center text-[11px] px-1 text-slate-400">
+          <span>Hands loaded</span>
+          <button onclick="confirmClearAll()" class="text-rose-400 hover:text-rose-300 font-medium flex items-center gap-1.5 transition-colors" title="Delete and clear all hands and solver reviews">
+            <i class="fa-solid fa-trash-can text-[10px]"></i>
+            <span>Clear All</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hand List Container -->
+      <div id="handList" class="flex-1 overflow-y-auto p-2 space-y-2">
+        <!-- Loaded via JS -->
+      </div>
+    </aside>
+
+    <!-- Center: Interactive Poker Table Replayer -->
+    <main class="flex-1 flex flex-col bg-gradient-to-b from-slate-950 to-[#0a0e17] overflow-hidden relative">
+
+      <!-- Top Hand Header & Info -->
+      <div class="h-16 border-b border-slate-800/80 px-6 flex items-center justify-between text-xs bg-slate-900/50 backdrop-blur-md">
+        <div class="flex items-center space-x-2.5 flex-wrap gap-y-1">
+          <span id="currentHandSite" class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-800 text-teal-400 border border-slate-700/80">--</span>
+          <span id="currentHandId" class="font-bold text-white mono text-xs px-2.5 py-1 rounded bg-slate-950/80 border border-slate-800">--</span>
+          <span id="currentHandHeroProfit" class="px-2.5 py-1 rounded-md mono font-bold text-xs bg-slate-800 text-slate-300 border border-slate-700 flex items-center gap-1.5" title="Hero Net Profit / Loss for this hand">Hero: --</span>
+          <span class="px-2 py-1 rounded bg-slate-800/90 text-slate-300 border border-slate-750 flex items-center gap-1.5" title="Date & Time / Session">
+            <i class="fa-regular fa-clock text-slate-400 text-[11px]"></i>
+            <span id="currentHandDate" class="mono text-[11px]">--</span>
+          </span>
+          <span class="px-2 py-1 rounded bg-slate-800/90 text-amber-300 border border-slate-750 font-semibold flex items-center gap-1.5" title="Stakes / Blinds">
+            <i class="fa-solid fa-coins text-amber-400 text-[11px]"></i>
+            <span id="currentHandStakes" class="mono text-[11px]">--</span>
+          </span>
+          <span class="px-2 py-1 rounded bg-slate-800/90 text-slate-300 border border-slate-750 flex items-center gap-1.5" title="Table / Tournament">
+            <i class="fa-solid fa-table-cells text-slate-400 text-[11px]"></i>
+            <span id="currentHandTable" class="truncate max-w-[150px]">--</span>
+          </span>
+          <span id="currentHandVariant" class="px-2 py-1 rounded bg-slate-800/80 text-slate-400">--</span>
+          <span id="currentHandRitBadge" class="hidden px-2 py-1 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold text-xs flex items-center gap-1.5 shadow-sm" title="This hand was Run It Twice">
+            <i class="fa-solid fa-layer-group text-[10px]"></i>
+            <span>Run It Twice</span>
+          </span>
+          <button id="btnReviewCurrent" onclick="reviewCurrentHand()" class="px-2.5 py-1 rounded-md bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5 transition-all font-semibold" title="Run RocketSolver GTO review on this hand only">
+            <i class="fa-solid fa-microchip text-[10px]"></i>
+            <span>Review Hand</span>
+          </button>
+          <button id="btnStepSolver" onclick="stepCurrentHandInSolver()" class="px-2.5 py-1 rounded-md bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 border border-teal-500/40 flex items-center gap-1.5 transition-all" title="Replay this hand step-by-step live inside RocketSolver">
+            <i class="fa-solid fa-gamepad text-[10px]"></i>
+            <span>Step in RocketSolver</span>
+          </button>
+          <button id="btnDeleteCurrent" onclick="deleteCurrentHand()" class="px-2.5 py-1 rounded-md bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center gap-1.5 transition-all" title="Delete this hand from software">
+            <i class="fa-solid fa-trash-can text-[10px]"></i>
+            <span>Delete</span>
+          </button>
+        </div>
+
+        <!-- Action Commentary Banner -->
+        <div id="actionBanner" class="px-4 py-1.5 rounded-full bg-slate-800/90 border border-slate-700/80 text-emerald-400 font-medium flex items-center gap-2 shadow-inner">
+          <i class="fa-solid fa-play text-[10px]"></i>
+          <span id="actionBannerText">Ready to replay</span>
+        </div>
+      </div>
+
+      <!-- Poker Table Felt Area -->
+      <div class="flex-1 relative flex items-center justify-center p-6">
+        <div class="poker-table-outer w-[820px] h-[480px] flex items-center justify-center">
+          <div class="poker-table-felt w-[790px] h-[450px] relative flex flex-col items-center justify-center">
+
+            <!-- Center Table: Pot & Board -->
+            <div class="flex flex-col items-center justify-center z-10 space-y-3">
+              <!-- Pot Badge -->
+              <div class="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-950/80 border border-emerald-500/30 shadow-lg backdrop-blur-sm">
+                <div class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
+                <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Total Pot:</span>
+                <span id="tablePot" class="text-base font-bold text-emerald-400 mono">$0.00</span>
+              </div>
+
+              <!-- Community Board Cards -->
+              <div id="boardCards" class="flex gap-2 min-h-[64px] items-center justify-center">
+                <!-- Board cards rendered dynamically -->
+              </div>
+            </div>
+
+            <!-- Table Seats (6-max layout) -->
+            <div id="seatsContainer" class="absolute inset-0 pointer-events-none">
+              <!-- Rendered via JS -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Replay Toolbar -->
+      <div class="h-20 border-t border-slate-800 bg-slate-900/90 px-6 flex items-center justify-between z-10">
+        <!-- Street Tabs -->
+        <div class="flex items-center space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+          <button id="tabStreetPreflop" onclick="jumpToStreet('preflop')" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-all font-medium">Preflop</button>
+          <button id="tabStreetFlop" onclick="jumpToStreet('flop')" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-all font-medium">Flop</button>
+          <button id="tabStreetTurn" onclick="jumpToStreet('turn')" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-all font-medium">Turn</button>
+          <button id="tabStreetRiver" onclick="jumpToStreet('river')" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-all font-medium">River</button>
+          <button id="tabStreetShowdown" onclick="jumpToStreet('showdown')" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-all font-medium">Showdown</button>
+        </div>
+
+        <!-- Playback Navigation Controls -->
+        <div class="flex items-center space-x-3">
+          <button onclick="goToStart()" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition-all" title="Start">
+            <i class="fa-solid fa-backward-step"></i>
+          </button>
+          <button onclick="stepBack()" class="w-10 h-10 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center text-sm transition-all" title="Previous Action">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button id="btnPlayPause" onclick="togglePlay()" class="w-12 h-12 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 flex items-center justify-center font-bold text-base shadow-lg shadow-teal-500/20 transition-all" title="Play/Pause">
+            <i class="fa-solid fa-play" id="playIcon"></i>
+          </button>
+          <button onclick="stepForward()" class="w-10 h-10 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center text-sm transition-all" title="Next Action">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+          <button onclick="goToEnd()" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition-all" title="End">
+            <i class="fa-solid fa-forward-step"></i>
+          </button>
+        </div>
+
+        <!-- Step Scrubber -->
+        <div class="flex items-center space-x-3 w-64">
+          <span id="stepCounter" class="text-xs text-slate-400 mono whitespace-nowrap">Step 0 / 0</span>
+          <input type="range" id="stepSlider" min="0" max="0" value="0" oninput="onSliderChange(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-teal-400">
+        </div>
+      </div>
+    </main>
+
+    <!-- Right Sidebar: RocketSolver GTO Verification Panel -->
+    <aside class="w-96 border-l border-slate-800 bg-slate-900/70 p-4 flex flex-col overflow-y-auto space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-crosshairs text-teal-400"></i>
+          <h2 class="font-bold text-sm text-white">Solver Review Panel</h2>
+        </div>
+        <span id="solverReviewBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">
+          Not Analyzed
+        </span>
+      </div>
+
+      <!-- Active Hand Summary Card -->
+      <div id="solverCard" class="p-4 rounded-xl border border-slate-800 bg-slate-950/80 space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <div class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Hero Hand & Position</div>
+            <div class="text-base font-bold text-white flex items-center gap-2 mt-0.5">
+              <span id="heroCardDisplay" class="flex gap-1">--</span>
+              <span id="heroPosDisplay" class="px-2 py-0.5 rounded bg-slate-800 text-xs text-teal-400 font-mono">--</span>
+              <span id="heroNetDisplay" class="px-2 py-0.5 rounded text-xs mono font-bold bg-slate-800 text-slate-400 border border-slate-700">--</span>
+            </div>
+          </div>
+          <div id="gtoStatusIcon" class="w-9 h-9 rounded-full flex items-center justify-center text-lg bg-slate-800 text-slate-400">
+            <i class="fa-solid fa-check"></i>
+          </div>
+        </div>
+
+        <div id="unreviewedBox" class="p-3 rounded-lg bg-slate-900/90 border border-slate-800 text-slate-300 text-xs space-y-2">
+          <div class="font-semibold flex items-center gap-1.5 text-slate-300">
+            <i class="fa-solid fa-clock text-slate-400"></i>
+            <span>Not Reviewed in RocketSolver</span>
+          </div>
+          <p class="text-slate-400 text-[11px] leading-relaxed">
+            This hand has not been checked yet. Click <strong class="text-teal-400">"Review This Hand"</strong> or <strong class="text-emerald-400">"Run RocketSolver Check"</strong> to test against live GTO ranges.
+          </p>
+          <button onclick="reviewCurrentHand()" class="w-full mt-1 py-1.5 px-3 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold text-xs rounded-lg shadow-sm flex items-center justify-center gap-2 transition-all">
+            <i class="fa-solid fa-robot"></i>
+            <span>Review This Hand With Solver</span>
+          </button>
+        </div>
+
+        <div id="mismatchBox" class="hidden space-y-2.5">
+          <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center justify-between">
+            <div class="font-bold flex items-center gap-1.5 text-amber-400">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span>Action Mismatch Flagged</span>
+            </div>
+            <span id="mismatchCountBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">1 Issue</span>
+          </div>
+          <div id="mismatchReasonsList" class="space-y-2">
+            <!-- Populated via JS -->
+          </div>
+          <button onclick="reviewCurrentHand()" class="w-full mt-2 py-1.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-[11px] rounded-lg border border-slate-700 flex items-center justify-center gap-2 transition-all">
+            <i class="fa-solid fa-arrows-rotate text-teal-400"></i>
+            <span>Re-Review This Hand</span>
+          </button>
+        </div>
+
+        <div id="cleanBox" class="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs">
+          <div class="font-semibold flex items-center gap-1.5 text-emerald-400">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>All Actions GTO Validated</span>
+          </div>
+          <p class="text-slate-400 mt-1">Actions in this hand align with RocketSolver strategy ranges.</p>
+          <button onclick="reviewCurrentHand()" class="w-full mt-2.5 py-1.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-[11px] rounded-lg border border-slate-700 flex items-center justify-center gap-2 transition-all">
+            <i class="fa-solid fa-arrows-rotate text-teal-400"></i>
+            <span>Re-Review This Hand</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Execution Log -->
+      <div class="flex-1 flex flex-col min-h-[220px]">
+        <div class="text-xs font-semibold text-slate-400 mb-2 flex items-center justify-between">
+          <span>Verification Log</span>
+          <span class="text-[10px] text-teal-400 font-medium">Background Safe</span>
+        </div>
+        <div id="solverLogs" class="flex-1 bg-slate-950 border border-slate-800/80 rounded-xl p-3 mono text-[11px] text-slate-400 overflow-y-auto space-y-1">
+          <p class="text-slate-600">// Ready. Click "Run RocketSolver Check" to verify hands in background.</p>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- Upload Modal -->
+  <div id="uploadModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-[640px] max-w-full p-6 shadow-2xl space-y-5">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-cloud-arrow-up text-teal-400"></i>
+          Upload Hand Histories
+        </h3>
+        <button onclick="closeUploadModal()" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Drag & Drop Box -->
+      <div id="dropZone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" class="border-2 border-dashed border-slate-700 hover:border-teal-500 rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all bg-slate-950/60">
+        <i class="fa-solid fa-file-arrow-up text-3xl text-teal-400 mb-3"></i>
+        <p class="text-sm font-semibold text-white">Drag & drop hand history files here</p>
+        <p class="text-xs text-slate-400 mt-1">Supports 888poker, CoinPoker, and GGPoker hand history files (.txt)</p>
+        <label class="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-teal-400 text-xs font-semibold rounded-lg border border-slate-700 cursor-pointer transition-all">
+          Browse Files
+          <input type="file" id="fileInput" multiple accept=".txt" onchange="handleFileSelect(event)" class="hidden">
+        </label>
+      </div>
+
+      <!-- Selected files preview -->
+      <div id="selectedFilesBox" class="hidden text-xs text-slate-300 space-y-1 max-h-32 overflow-y-auto bg-slate-950 p-3 rounded-lg border border-slate-800">
+        <!-- List of files -->
+      </div>
+
+      <!-- Or paste text -->
+      <div class="space-y-2">
+        <div class="text-xs text-slate-400 font-semibold">Or paste hand history text directly:</div>
+        <textarea id="importTextInput" rows="5" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs mono text-slate-200 focus:outline-none focus:border-teal-500" placeholder="Paste 888poker, CoinPoker, or GGPoker hand histories here..."></textarea>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-2 border-t border-slate-800">
+        <button onclick="closeUploadModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-lg">Cancel</button>
+        <button id="btnSubmitUpload" onclick="submitUpload()" class="px-5 py-2 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs font-semibold rounded-lg shadow-md shadow-teal-900/30">
+          Import Hands
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Replayer Application Logic -->
+  <script>
+    let allHands = [];
+    let currentFilter = 'all'; // Default to show all hands so user sees loaded hands immediately
+    let currentHandData = null;
+    let currentStepIndex = 0;
+    let isPlaying = false;
+    let playInterval = null;
+    let selectedUploadFiles = [];
+    let progressPollInterval = null;
+
+    // Helper: Render card pill
+    function renderCardHTML(cardStr) {
+      if (!cardStr || cardStr === "back") {
+        return `
+          <div class="w-9 h-12 card-back rounded-md shadow-md flex items-center justify-center relative overflow-hidden select-none">
+            <div class="w-7 h-10 border border-blue-300/40 rounded-sm bg-blue-950/40 flex items-center justify-center shadow-inner">
+              <span class="text-blue-200/50 text-[10px] font-black">♠</span>
+            </div>
+          </div>
+        `;
+      }
+      const rank = cardStr.slice(0, -1).toUpperCase();
+      const suit = cardStr.slice(-1).toLowerCase();
+      const suitClass = `card-${suit}`;
+      const suitIcons = { 's': '♠', 'h': '♥', 'd': '♦', 'c': '♣' };
+      return `
+        <div class="w-9 h-12 ${suitClass} rounded-md shadow-md border border-slate-300 flex flex-col items-center justify-between p-1 font-bold select-none">
+          <span class="text-[11px] leading-none self-start">${rank}</span>
+          <span class="text-sm leading-none">${suitIcons[suit] || suit}</span>
+        </div>
+      `;
+    }
+
+    let minHeroNetFilterCents = 0; // 0 = all hands, e.g. 200 = >= $2.00
+    let heroNetMode = 'any'; // 'any' (won or lost), 'loss', 'win'
+
+    function getHeroNetFilteredHands() {
+      if (minHeroNetFilterCents <= 0) {
+        if (heroNetMode === 'loss') return allHands.filter(h => (h.hero_net_cents || 0) < 0);
+        if (heroNetMode === 'win') return allHands.filter(h => (h.hero_net_cents || 0) > 0);
+        return allHands;
+      }
+      return allHands.filter(h => {
+        const net = h.hero_net_cents || 0;
+        if (heroNetMode === 'loss') {
+          return (-net) >= minHeroNetFilterCents;
+        } else if (heroNetMode === 'win') {
+          return net >= minHeroNetFilterCents;
+        } else {
+          // 'any': how much Hero won OR lost
+          return Math.abs(net) >= minHeroNetFilterCents;
+        }
+      });
+    }
+
+    function setNetMode(mode) {
+      heroNetMode = mode;
+      const modes = [
+        { id: 'netModeAny', key: 'any', activeCls: 'bg-slate-800 text-teal-300 font-bold', inactiveCls: 'text-slate-400 font-medium hover:text-white' },
+        { id: 'netModeLoss', key: 'loss', activeCls: 'bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold', inactiveCls: 'text-slate-400 font-medium hover:text-rose-400' },
+        { id: 'netModeWin', key: 'win', activeCls: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold', inactiveCls: 'text-slate-400 font-medium hover:text-emerald-400' },
+      ];
+      modes.forEach(m => {
+        const el = document.getElementById(m.id);
+        if (!el) return;
+        el.className = `py-1 rounded text-center transition-all ${mode === m.key ? m.activeCls : m.inactiveCls}`;
+      });
+      updateHeroNetFilterSummary();
+      renderHandList();
+      checkAndAdjustSelectedHand();
+      updateSolverButtonState();
+    }
+
+    function onMinHeroNetInputChange(val) {
+      const num = parseFloat(val);
+      if (!isNaN(num) && num > 0) {
+        minHeroNetFilterCents = Math.round(num * 100);
+      } else {
+        minHeroNetFilterCents = 0;
+      }
+      updateHeroNetPresetButtons();
+      updateHeroNetFilterSummary();
+      renderHandList();
+      checkAndAdjustSelectedHand();
+      updateSolverButtonState();
+    }
+
+    function setHeroNetPreset(amount) {
+      const input = document.getElementById('minHeroNetInput');
+      if (amount <= 0) {
+        minHeroNetFilterCents = 0;
+        if (input) input.value = '';
+      } else {
+        minHeroNetFilterCents = Math.round(amount * 100);
+        if (input) input.value = amount.toFixed(amount % 1 === 0 ? 0 : 2);
+      }
+      updateHeroNetPresetButtons();
+      updateHeroNetFilterSummary();
+      renderHandList();
+      checkAndAdjustSelectedHand();
+      updateSolverButtonState();
+    }
+
+    function clearHeroNetFilter() {
+      setHeroNetPreset(0);
+      setNetMode('any');
+    }
+
+    function updateHeroNetPresetButtons() {
+      const currentDollars = minHeroNetFilterCents / 100;
+      [0, 0.5, 1, 2, 5].forEach(val => {
+        const idSuffix = val === 0.5 ? '05' : String(val);
+        const btn = document.getElementById(`netPresetBtn${idSuffix}`);
+        if (!btn) return;
+        const isMatch = (val === 0 && minHeroNetFilterCents === 0) || (val > 0 && Math.abs(currentDollars - val) < 0.01);
+        if (isMatch) {
+          btn.className = "net-preset-btn px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold";
+        } else {
+          btn.className = "net-preset-btn px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-emerald-400 border border-slate-700 font-medium";
+        }
+      });
+    }
+
+    function updateHeroNetFilterSummary() {
+      const summaryEl = document.getElementById('heroNetFilterSummary');
+      if (!summaryEl) return;
+      const modeLabel = heroNetMode === 'loss' ? 'Lost' : (heroNetMode === 'win' ? 'Won' : '|Won/Lost|');
+      if (minHeroNetFilterCents <= 0) {
+        if (heroNetMode === 'loss') {
+          summaryEl.innerText = 'All Losses';
+          summaryEl.className = 'text-[10px] text-rose-400 mono font-bold';
+        } else if (heroNetMode === 'win') {
+          summaryEl.innerText = 'All Wins';
+          summaryEl.className = 'text-[10px] text-emerald-400 mono font-bold';
+        } else {
+          summaryEl.innerText = 'All Hands';
+          summaryEl.className = 'text-[10px] text-slate-400 mono font-semibold';
+        }
+      } else {
+        summaryEl.innerText = `${modeLabel} ≥ $${(minHeroNetFilterCents / 100).toFixed(2)}`;
+        summaryEl.className = heroNetMode === 'loss' ? 'text-[10px] text-rose-400 mono font-bold' : 'text-[10px] text-emerald-400 mono font-bold';
+      }
+    }
+
+    function checkAndAdjustSelectedHand() {
+      const filteredHands = getHeroNetFilteredHands();
+      if (currentHandData && !filteredHands.some(h => h.hand_id === currentHandData.hand_id)) {
+        if (filteredHands.length > 0) {
+          selectHand(filteredHands[0].hand_id);
+        } else {
+          resetTableUI();
+        }
+      }
+    }
+
+    function updateSolverButtonState() {
+      const badge = document.getElementById('btnRunSolverBadge');
+      if (!badge) return;
+
+      const filteredHands = getHeroNetFilteredHands();
+      const unchecked = filteredHands.filter(h => !h.is_reviewed || h.review_status === 'not_reviewed');
+
+      const modePrefix = heroNetMode === 'loss' ? 'Lost' : (heroNetMode === 'win' ? 'Won' : '±');
+      if (minHeroNetFilterCents > 0) {
+        badge.classList.remove('hidden');
+        badge.innerText = `${modePrefix}≥$${(minHeroNetFilterCents/100).toFixed(minHeroNetFilterCents % 100 === 0 ? 0 : 2)} (${unchecked.length} to check)`;
+      } else if (heroNetMode !== 'any') {
+        badge.classList.remove('hidden');
+        badge.innerText = `${modePrefix} (${unchecked.length} to check)`;
+      } else {
+        if (unchecked.length < allHands.length && unchecked.length > 0) {
+          badge.classList.remove('hidden');
+          badge.innerText = `${unchecked.length} to check`;
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+    }
+
+    async function loadHands() {
+      try {
+        const res = await fetch('/api/hands');
+        allHands = await res.json();
+        updateHeroNetFilterSummary();
+        updateHeroNetPresetButtons();
+        updateSolverButtonState();
+        renderHandList();
+
+        const filteredHands = getHeroNetFilteredHands();
+        if (allHands.length === 0 || filteredHands.length === 0) {
+          if (allHands.length === 0) currentHandData = null;
+          resetTableUI();
+        } else {
+          // If current hand is still in the filtered list, keep it selected
+          const stillExists = currentHandData && filteredHands.find(h => h.hand_id === currentHandData.hand_id);
+          if (stillExists) {
+            selectHand(stillExists.hand_id);
+          } else {
+            const reviewHands = filteredHands.filter(h => h.review_status === 'review' || h.marked_for_review);
+            if (currentFilter === 'review' && reviewHands.length > 0) {
+              selectHand(reviewHands[0].hand_id);
+            } else {
+              selectHand(filteredHands[0].hand_id);
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load hands:", e);
+      }
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      const tabs = [
+        { id: 'tabFilterAll', key: 'all', activeCls: 'bg-slate-800 text-white font-bold', inactiveCls: 'text-slate-400 font-medium hover:text-white' },
+        { id: 'tabFilterReview', key: 'review', activeCls: 'bg-amber-500/20 text-amber-400 border border-amber-500/30 font-bold', inactiveCls: 'text-slate-400 font-medium hover:text-amber-400' },
+        { id: 'tabFilterGTO', key: 'gto_ok', activeCls: 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold', inactiveCls: 'text-slate-400 font-medium hover:text-emerald-400' },
+        { id: 'tabFilterNotReviewed', key: 'not_reviewed', activeCls: 'bg-slate-800 text-slate-300 border border-slate-700 font-bold', inactiveCls: 'text-slate-400 font-medium hover:text-slate-200' }
+      ];
+      tabs.forEach(t => {
+        const el = document.getElementById(t.id);
+        if (!el) return;
+        el.className = `py-1.5 rounded-md text-center transition-all ${filter === t.key ? t.activeCls : t.inactiveCls}`;
+      });
+      renderHandList();
+    }
+
+    function getStreetBadgeHTML(street) {
+      const s = (street || '').toLowerCase();
+      if (s.includes('preflop')) {
+        return `<span class="street-badge-preflop px-2 py-0.5 rounded text-[10px] font-black tracking-wider uppercase inline-flex items-center gap-1"><i class="fa-solid fa-layer-group text-[8px]"></i> PREFLOP</span>`;
+      }
+      if (s.includes('flop')) {
+        return `<span class="street-badge-flop px-2 py-0.5 rounded text-[10px] font-black tracking-wider uppercase inline-flex items-center gap-1"><i class="fa-solid fa-clone text-[8px]"></i> FLOP</span>`;
+      }
+      if (s.includes('turn')) {
+        return `<span class="street-badge-turn px-2 py-0.5 rounded text-[10px] font-black tracking-wider uppercase inline-flex items-center gap-1"><i class="fa-solid fa-arrows-turn-to-dots text-[8px]"></i> TURN</span>`;
+      }
+      if (s.includes('river')) {
+        return `<span class="street-badge-river px-2 py-0.5 rounded text-[10px] font-black tracking-wider uppercase inline-flex items-center gap-1"><i class="fa-solid fa-water text-[8px]"></i> RIVER</span>`;
+      }
+      return `<span class="street-badge-showdown px-2 py-0.5 rounded text-[10px] font-black tracking-wider uppercase inline-flex items-center gap-1"><i class="fa-solid fa-award text-[8px]"></i> SHOWDOWN</span>`;
+    }
+
+    function highlightStreetsInText(text) {
+      if (!text) return '';
+      return text
+        .replace(/\b(Preflop|preflop|PREFLOP)\b/g, '<span class="street-inline-preflop">PREFLOP</span>')
+        .replace(/\b(Flop|flop|FLOP)\b/g, '<span class="street-inline-flop">FLOP</span>')
+        .replace(/\b(Turn|turn|TURN)\b/g, '<span class="street-inline-turn">TURN</span>')
+        .replace(/\b(River|river|RIVER)\b/g, '<span class="street-inline-river">RIVER</span>')
+        .replace(/\b(Showdown|showdown|SHOWDOWN)\b/g, '<span class="street-inline-showdown">SHOWDOWN</span>');
+    }
+
+    function getBubbleConfig(actionType, isAllIn) {
+      const t = (actionType || '').toLowerCase();
+      if (isAllIn || t === 'all_in') {
+        return {
+          typeClass: 'bubble-type-all_in',
+          borderColor: '#c084fc',
+          icon: '<i class="fa-solid fa-bolt text-purple-200"></i>'
+        };
+      }
+      if (t === 'fold') {
+        return {
+          typeClass: 'bubble-type-fold',
+          borderColor: '#ef4444',
+          icon: '<i class="fa-solid fa-ban text-rose-300"></i>'
+        };
+      }
+      if (t === 'check') {
+        return {
+          typeClass: 'bubble-type-check',
+          borderColor: '#38bdf8',
+          icon: '<i class="fa-solid fa-check text-sky-300"></i>'
+        };
+      }
+      if (t === 'call') {
+        return {
+          typeClass: 'bubble-type-call',
+          borderColor: '#10b981',
+          icon: '<i class="fa-solid fa-phone-volume text-emerald-300"></i>'
+        };
+      }
+      if (t === 'bet') {
+        return {
+          typeClass: 'bubble-type-bet',
+          borderColor: '#f59e0b',
+          icon: '<i class="fa-solid fa-arrow-trend-up text-amber-300"></i>'
+        };
+      }
+      if (t === 'raise') {
+        return {
+          typeClass: 'bubble-type-raise',
+          borderColor: '#f97316',
+          icon: '<i class="fa-solid fa-angles-up text-orange-200"></i>'
+        };
+      }
+      if (t.includes('sb') || t.includes('bb')) {
+        return {
+          typeClass: 'bubble-type-blind',
+          borderColor: '#818cf8',
+          icon: '<i class="fa-solid fa-circle-dot text-indigo-300"></i>'
+        };
+      }
+      if (t.includes('win')) {
+        return {
+          typeClass: 'bubble-type-win',
+          borderColor: '#eab308',
+          icon: '<i class="fa-solid fa-trophy text-yellow-300"></i>'
+        };
+      }
+      return {
+        typeClass: 'bubble-type-check',
+        borderColor: '#38bdf8',
+        icon: '<i class="fa-solid fa-circle-info text-sky-300"></i>'
+      };
+    }
+
+    function renderSpeechBubbleHTML(bubble, posDir, hasCards) {
+      if (!bubble || !bubble.text) return '';
+      const cfg = getBubbleConfig(bubble.action_type, bubble.is_all_in);
+
+      let tailSvg = '';
+      let posClass = '';
+      let extraOffsetStyle = '';
+
+      if (posDir === 'top') {
+        posClass = 'bubble-pos-top';
+        if (hasCards) {
+          extraOffsetStyle = 'style="bottom: calc(100% + 22px);"';
+        }
+        tailSvg = `<svg class="tail-svg-down" width="12" height="7" viewBox="0 0 12 7"><polygon points="0,0 12,0 6,7" fill="${cfg.borderColor}"/></svg>`;
+      } else if (posDir === 'bottom') {
+        posClass = 'bubble-pos-bottom';
+        tailSvg = `<svg class="tail-svg-up" width="12" height="7" viewBox="0 0 12 7"><polygon points="0,7 12,7 6,0" fill="${cfg.borderColor}"/></svg>`;
+      } else if (posDir === 'right' || posDir === 'top-right') {
+        posClass = posDir === 'top-right' ? 'bubble-pos-top-right' : 'bubble-pos-right';
+        tailSvg = `<svg class="tail-svg-left" width="7" height="12" viewBox="0 0 7 12"><polygon points="7,0 7,12 0,6" fill="${cfg.borderColor}"/></svg>`;
+      } else {
+        // left or top-left
+        posClass = posDir === 'top-left' ? 'bubble-pos-top-left' : 'bubble-pos-left';
+        tailSvg = `<svg class="tail-svg-right" width="7" height="12" viewBox="0 0 7 12"><polygon points="0,0 0,12 7,6" fill="${cfg.borderColor}"/></svg>`;
+      }
+
+      return `
+        <div class="speech-bubble-wrapper ${posClass}" ${extraOffsetStyle}>
+          <div class="speech-bubble-box ${cfg.typeClass}">
+            ${cfg.icon}
+            <span class="tracking-wide uppercase">${bubble.text}</span>
+          </div>
+          ${tailSvg}
+        </div>
+      `;
+    }
+
+    function updateStreetTabsHighlight(street) {
+      const s = (street || '').toLowerCase();
+      const tabs = [
+        { id: 'tabStreetPreflop', key: 'preflop', cls: 'street-badge-preflop' },
+        { id: 'tabStreetFlop', key: 'flop', cls: 'street-badge-flop' },
+        { id: 'tabStreetTurn', key: 'turn', cls: 'street-badge-turn' },
+        { id: 'tabStreetRiver', key: 'river', cls: 'street-badge-river' },
+        { id: 'tabStreetShowdown', key: 'showdown', cls: 'street-badge-showdown' }
+      ];
+
+      tabs.forEach(t => {
+        const el = document.getElementById(t.id);
+        if (!el) return;
+        if (s === t.key) {
+          el.className = `px-3 py-1.5 rounded-lg font-black transition-all ${t.cls}`;
+        } else {
+          el.className = "px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-all font-medium";
+        }
+      });
+    }
+
+    let currentSort = 'default';
+
+    function setSort(sortType) {
+      currentSort = sortType;
+      renderHandList();
+    }
+
+    function getHandStreetRank(h) {
+      if ((!h.marked_for_review && h.review_status !== 'review') || !h.review_reasons || h.review_reasons.length === 0) return 99;
+      const s = (h.review_reasons[0].street || '').toLowerCase();
+      if (s.includes('preflop')) return 1;
+      if (s.includes('flop')) return 2;
+      if (s.includes('turn')) return 3;
+      if (s.includes('river')) return 4;
+      if (s.includes('showdown')) return 5;
+      return 10;
+    }
+
+    function renderHandList() {
+      const container = document.getElementById('handList');
+      container.innerHTML = '';
+
+      const filteredHands = getHeroNetFilteredHands();
+
+      const reviewHands = filteredHands.filter(h => h.review_status === 'review' || h.marked_for_review);
+      const gtoHands = filteredHands.filter(h => h.review_status === 'gto_ok');
+      const uncheckedHands = filteredHands.filter(h => !h.is_reviewed || h.review_status === 'not_reviewed');
+
+      document.getElementById('countAll').innerText = filteredHands.length;
+      document.getElementById('countReview').innerText = reviewHands.length;
+      if (document.getElementById('countGTO')) document.getElementById('countGTO').innerText = gtoHands.length;
+      if (document.getElementById('countNotReviewed')) document.getElementById('countNotReviewed').innerText = uncheckedHands.length;
+
+      // Update hero net filter stats line
+      const matchCountEl = document.getElementById('heroNetFilterMatchCount');
+      const uncheckedCountEl = document.getElementById('heroNetFilterUncheckedCount');
+      if (matchCountEl) {
+        if (minHeroNetFilterCents > 0 || heroNetMode !== 'any') {
+          matchCountEl.innerText = `Showing ${filteredHands.length} of ${allHands.length} hands`;
+        } else {
+          matchCountEl.innerText = `Showing all ${allHands.length} hands`;
+        }
+      }
+      if (uncheckedCountEl) {
+        uncheckedCountEl.innerText = `${uncheckedHands.length} unchecked`;
+        uncheckedCountEl.className = uncheckedHands.length > 0 ? "text-amber-400 font-medium" : "text-emerald-400 font-medium";
+      }
+
+      let filtered;
+      if (currentFilter === 'review') {
+        filtered = [...reviewHands];
+      } else if (currentFilter === 'gto_ok') {
+        filtered = [...gtoHands];
+      } else if (currentFilter === 'not_reviewed') {
+        filtered = [...uncheckedHands];
+      } else {
+        filtered = [...filteredHands];
+      }
+
+      if (currentSort === 'impact_desc') {
+        filtered.sort((a, b) => Math.abs(b.hero_net_cents ?? 0) - Math.abs(a.hero_net_cents ?? 0));
+      } else if (currentSort === 'won_asc') {
+        filtered.sort((a, b) => (a.hero_net_cents ?? 0) - (b.hero_net_cents ?? 0));
+      } else if (currentSort === 'won_desc') {
+        filtered.sort((a, b) => (b.hero_net_cents ?? 0) - (a.hero_net_cents ?? 0));
+      } else if (currentSort === 'pot_desc') {
+        filtered.sort((a, b) => (b.total_pot_cents ?? 0) - (a.total_pot_cents ?? 0));
+      } else if (currentSort === 'pot_asc') {
+        filtered.sort((a, b) => (a.total_pot_cents ?? 0) - (b.total_pot_cents ?? 0));
+      } else if (currentSort === 'street_asc') {
+        filtered.sort((a, b) => {
+          const rankA = getHandStreetRank(a);
+          const rankB = getHandStreetRank(b);
+          const diff = rankA - rankB;
+          if (diff !== 0) return diff;
+          return (a.hero_net_cents ?? 0) - (b.hero_net_cents ?? 0);
+        });
+      } else if (currentSort === 'street_desc') {
+        filtered.sort((a, b) => {
+          const rankA = getHandStreetRank(a);
+          const rankB = getHandStreetRank(b);
+          if (rankA === 99 && rankB !== 99) return 1;
+          if (rankB === 99 && rankA !== 99) return -1;
+          const diff = rankB - rankA;
+          if (diff !== 0) return diff;
+          return (a.hero_net_cents ?? 0) - (b.hero_net_cents ?? 0);
+        });
+      }
+
+      if (filtered.length === 0) {
+        if (allHands.length === 0) {
+          container.innerHTML = `
+            <div class="p-6 text-center space-y-3">
+              <div class="w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700/60 text-slate-400 flex items-center justify-center mx-auto text-lg">
+                <i class="fa-solid fa-folder-open"></i>
+              </div>
+              <div class="text-xs text-slate-400 font-medium">No hands currently loaded.</div>
+              <div class="space-y-1.5 pt-1">
+                <button onclick="openUploadModal()" class="w-full py-1.5 px-3 bg-teal-600/80 hover:bg-teal-500 text-white rounded-lg text-xs font-semibold shadow-md transition-all flex items-center justify-center gap-1.5">
+                  <i class="fa-solid fa-upload text-[11px]"></i>
+                  <span>Upload Hand History</span>
+                </button>
+                <button onclick="loadConvertedFromDisk()" class="w-full py-1.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium border border-slate-700 transition-all flex items-center justify-center gap-1.5" title="Loads converted hands previously saved in converted_hands/">
+                  <i class="fa-solid fa-hard-drive text-[11px] text-teal-400"></i>
+                  <span>Load Converted from Disk</span>
+                </button>
+              </div>
+            </div>
+          `;
+        } else if ((minHeroNetFilterCents > 0 || heroNetMode !== 'any') && filteredHands.length === 0) {
+          const modeWord = heroNetMode === 'loss' ? 'Hero Loss' : (heroNetMode === 'win' ? 'Hero Win' : 'Hero Won/Lost');
+          container.innerHTML = `
+            <div class="p-6 text-center text-xs text-slate-400 space-y-2.5">
+              <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 text-amber-400 flex items-center justify-center mx-auto text-base">
+                <i class="fa-solid fa-filter"></i>
+              </div>
+              <div>No hands found with ${modeWord} ≥ $${(minHeroNetFilterCents/100).toFixed(2)}.</div>
+              <button onclick="clearHeroNetFilter()" class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs hover:bg-teal-500/30 font-medium">
+                Reset Filter
+              </button>
+            </div>
+          `;
+        } else {
+          container.innerHTML = '<div class="p-8 text-center text-xs text-slate-500">No hands matching filter.<br><span class="text-teal-400 cursor-pointer mt-1 inline-block" onclick="setFilter(\'all\')">Show all matching hands</span></div>';
+        }
+        return;
+      }
+
+      filtered.forEach(hand => {
+        const isSelected = currentHandData && currentHandData.hand_id === hand.hand_id;
+        const cardEl = document.createElement('div');
+        cardEl.className = `p-3 rounded-xl border cursor-pointer transition-all ${
+          isSelected
+            ? 'bg-slate-800/90 border-teal-500 shadow-md shadow-teal-500/10'
+            : 'bg-slate-950/70 border-slate-800/70 hover:bg-slate-800/50'
+        }`;
+        cardEl.onclick = () => selectHand(hand.hand_id);
+
+        let badgeHtml = '';
+        if (hand.review_status === 'review' || hand.marked_for_review) {
+          badgeHtml = `<span class="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 text-[10px] font-bold">⚠️ Review</span>`;
+        } else if (hand.review_status === 'gto_ok') {
+          badgeHtml = `<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-medium border border-emerald-500/30">✅ GTO OK</span>`;
+        } else {
+          badgeHtml = `<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 text-[10px] font-medium border border-slate-700">⏳ Not Reviewed</span>`;
+        }
+
+        const heroCardsHtml = hand.hero_cards && hand.hero_cards.length > 0
+          ? hand.hero_cards.map(c => `<span class="text-xs font-bold ${getSuitTextColor(c)}">${c}</span>`).join(' ')
+          : '<span class="text-slate-500 text-xs">--</span>';
+
+        let streetBadgesHtml = '';
+        if ((hand.review_status === 'review' || hand.marked_for_review) && hand.review_reasons && hand.review_reasons.length > 0) {
+          const uniqueStreets = [...new Set(hand.review_reasons.map(r => r.street).filter(Boolean))];
+          streetBadgesHtml = uniqueStreets.map(st => getStreetBadgeHTML(st)).join(' ');
+        }
+
+        const isLoss = hand.hero_is_loss;
+        const isWin = hand.hero_is_win;
+        const profitClass = isLoss
+          ? 'text-rose-400 bg-rose-500/15 border-rose-500/30 font-bold'
+          : (isWin ? 'text-emerald-400 bg-emerald-500/15 border-emerald-500/30 font-bold' : 'text-slate-400 bg-slate-800/50 border-slate-700/60 font-medium');
+
+        const titleText = hand.display_title || hand.hand_id;
+        const subtitleText = hand.display_subtitle || `${hand.hand_date || ''} ${hand.stakes ? '• ' + hand.stakes : ''}`;
+
+        cardEl.innerHTML = `
+          <div class="flex justify-between items-start mb-1.5">
+            <div class="min-w-0 pr-2">
+              <span class="mono font-bold text-xs text-white truncate block" title="${titleText}">${titleText}</span>
+              <span class="text-[10px] text-slate-400 mono block truncate">${subtitleText}</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              ${badgeHtml}
+              <button onclick="reviewSpecificHand('${hand.hand_id}', event)" class="text-slate-500 hover:text-teal-300 p-0.5 rounded transition-colors" title="Review this hand with RocketSolver">
+                <i class="fa-solid fa-crosshairs text-[11px]"></i>
+              </button>
+              <button onclick="deleteHand('${hand.hand_id}', event)" class="text-slate-500 hover:text-rose-400 p-0.5 rounded transition-colors" title="Delete hand">
+                <i class="fa-solid fa-trash-can text-[11px]"></i>
+              </button>
+            </div>
+          </div>
+          ${streetBadgesHtml ? `<div class="my-1.5 flex flex-wrap gap-1">${streetBadgesHtml}</div>` : ''}
+          <div class="flex justify-between items-center text-xs text-slate-400 mt-1.5 pt-1.5 border-t border-slate-800/80">
+            <div class="flex items-center gap-1.5">
+              <span class="px-1.5 py-0.5 rounded bg-slate-900 text-[10px] text-teal-300 font-medium">${hand.poker_site}</span>
+              ${hand.is_run_twice ? '<span class="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-extrabold tracking-wider" title="Run It Twice Hand">RIT</span>' : ''}
+              <span class="px-1 py-0.5 rounded bg-slate-900 text-[10px] text-slate-300 font-semibold">${hand.hero_pos || 'Hero'}</span>
+              <span>${heroCardsHtml}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="mono text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-amber-300 border border-slate-700/60 font-semibold" title="Total Pot Size">
+                ${hand.total_pot_formatted || '$0.00'}
+              </span>
+              <div class="flex items-center gap-1" title="Hero Net Result (Wins in Green, Losses in Red)">
+                <span class="mono text-xs px-2 py-0.5 rounded border ${profitClass}">
+                  ${hand.hero_net_formatted}
+                </span>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(cardEl);
+      });
+    }
+
+    async function deleteHand(handId, event) {
+      if (event) event.stopPropagation();
+      if (!confirm(`Are you sure you want to delete hand ${handId}?`)) return;
+      try {
+        const res = await fetch('/api/delete_hand', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ hand_id: handId })
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (currentHandData && currentHandData.hand_id === handId) {
+            currentHandData = null;
+          }
+          await loadHands();
+          if (!currentHandData) {
+            resetTableUI();
+          }
+        }
+      } catch (e) {
+        alert("Error deleting hand: " + e.message);
+      }
+    }
+
+    async function deleteCurrentHand() {
+      if (!currentHandData) return;
+      deleteHand(currentHandData.hand_id);
+    }
+
+    async function stepCurrentHandInSolver() {
+      if (!currentHandData) return;
+      const btn = document.getElementById('btnStepSolver');
+      const originalHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-[10px]"></i> Stepping in Solver...`;
+
+      const bannerText = document.getElementById('actionBannerText');
+      if (bannerText) bannerText.innerText = "Replaying hand action-by-action inside RocketSolver...";
+
+      showProgressBar(`Stepping Hand ${currentHandData.display_title || currentHandData.hand_id} live in RocketSolver...`);
+
+      try {
+        const res = await fetch('/api/step_hand_solver', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ hand_id: currentHandData.hand_id })
+        });
+        const data = await res.json();
+        if (data.cancelled) {
+          if (bannerText) bannerText.innerText = "RocketSolver stepping cancelled by user.";
+        } else if (data.success) {
+          if (data.marked_for_review && data.review_reasons?.length > 0) {
+            const r = data.review_reasons[0];
+            if (bannerText) bannerText.innerText = `⚠️ Solver Flagged (${r.street}): ${r.explanation}`;
+          } else {
+            if (bannerText) bannerText.innerText = `✅ Replay complete: Hand conforms to RocketSolver GTO strategy.`;
+          }
+          await loadHands();
+          await selectHand(currentHandData.hand_id);
+        } else {
+          alert("RocketSolver stepping: " + (data.error || "Unknown error"));
+        }
+      } catch (e) {
+        alert("Request error: " + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+        hideProgressBar();
+        resetSolverButtonsUI();
+      }
+    }
+
+    async function confirmClearAll() {
+      if (!confirm("Are you sure you want to clear and delete ALL hands and solver reviews from the software?")) return;
+      try {
+        const res = await fetch('/api/clear_hands', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          allHands = [];
+          currentHandData = null;
+          renderHandList();
+          resetTableUI();
+          updateSolverButtonState();
+        }
+      } catch (e) {
+        alert("Error clearing hands: " + e.message);
+      }
+    }
+
+    async function loadConvertedFromDisk() {
+      showProgressBar("Loading converted hands from disk...");
+      try {
+        const res = await fetch('/api/load_converted', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          await loadHands();
+        } else {
+          alert("Could not load converted hands: " + (data.error || "No files found"));
+        }
+      } catch (e) {
+        alert("Error loading from disk: " + e.message);
+      }
+    }
+
+    function resetTableUI() {
+      document.getElementById('currentHandId').innerText = "--";
+      document.getElementById('currentHandVariant').innerText = "--";
+      document.getElementById('currentHandSite').innerText = "--";
+      document.getElementById('currentHandDate').innerText = "--";
+      document.getElementById('currentHandStakes').innerText = "--";
+      document.getElementById('currentHandTable').innerText = "--";
+      const headerProfitEl = document.getElementById('currentHandHeroProfit');
+      if (headerProfitEl) {
+        headerProfitEl.innerHTML = "Hero: --";
+        headerProfitEl.className = "px-2.5 py-1 rounded-md mono font-bold text-xs bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1.5";
+      }
+      const ritBadge = document.getElementById('currentHandRitBadge');
+      if (ritBadge) ritBadge.classList.add('hidden');
+      document.getElementById('tablePot').innerText = "$0.00";
+      document.getElementById('boardCards').innerHTML = "";
+      document.getElementById('seatsContainer').innerHTML = "";
+      document.getElementById('stepCounter').innerText = "Step 0 / 0";
+      document.getElementById('stepSlider').value = 0;
+      document.getElementById('heroCardDisplay').innerHTML = "--";
+      document.getElementById('heroPosDisplay').innerText = "--";
+      const heroNetCard = document.getElementById('heroNetDisplay');
+      if (heroNetCard) {
+        heroNetCard.innerText = "--";
+        heroNetCard.className = "px-2 py-0.5 rounded text-xs mono font-bold bg-slate-800 text-slate-400 border border-slate-700";
+      }
+      document.getElementById('solverReviewBadge').innerText = "No Hands";
+      document.getElementById('solverReviewBadge').className = "text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400";
+      const unreviewedBox = document.getElementById('unreviewedBox');
+      if (unreviewedBox) unreviewedBox.classList.add('hidden');
+      document.getElementById('mismatchBox').classList.add('hidden');
+      document.getElementById('cleanBox').classList.add('hidden');
+      const reasonsList = document.getElementById('mismatchReasonsList');
+      if (reasonsList) reasonsList.innerHTML = "";
+      updateStreetTabsHighlight('');
+      document.getElementById('actionBannerText').innerText = "No hands loaded. Upload or import hands to start.";
+    }
+
+    function getSuitTextColor(cardStr) {
+      if (!cardStr) return 'text-slate-400';
+      const s = cardStr.slice(-1).toLowerCase();
+      if (s === 'h') return 'text-red-400';
+      if (s === 'd') return 'text-blue-400';
+      if (s === 'c') return 'text-emerald-400';
+      return 'text-slate-300';
+    }
+
+    async function selectHand(handId) {
+      pauseReplay();
+      try {
+        const res = await fetch(`/api/hand?id=${handId}`);
+        currentHandData = await res.json();
+        
+        // Default step: if hand has a review mistake (e.g. at Turn), jump replayer to that street by default!
+        currentStepIndex = 0;
+        if (currentHandData && currentHandData.marked_for_review && currentHandData.review_reasons && currentHandData.review_reasons.length > 0) {
+          const mistakeStreet = (currentHandData.review_reasons[0].street || '').toLowerCase();
+          if (mistakeStreet && currentHandData.steps) {
+            const streetIdx = currentHandData.steps.findIndex(s => (s.street || '').toLowerCase() === mistakeStreet);
+            if (streetIdx !== -1) {
+              currentStepIndex = streetIdx;
+            }
+          }
+        }
+
+        updateUIForHand();
+        renderHandList();
+      } catch (e) {
+        console.error("Failed to fetch hand details:", e);
+      }
+    }
+
+    function updateUIForHand() {
+      if (!currentHandData) return;
+
+      document.getElementById('currentHandId').innerText = currentHandData.display_title || currentHandData.hand_id;
+      document.getElementById('currentHandVariant').innerText = currentHandData.variant || "No-Limit Hold'em";
+      document.getElementById('currentHandSite').innerText = currentHandData.poker_site || "Online";
+      document.getElementById('currentHandDate').innerText = currentHandData.display_date || currentHandData.hand_date || "--";
+      document.getElementById('currentHandStakes').innerText = currentHandData.stakes || "--";
+      document.getElementById('currentHandTable').innerText = currentHandData.table_name || "--";
+
+      const ritBadge = document.getElementById('currentHandRitBadge');
+      if (ritBadge) {
+        if (currentHandData.is_run_twice) {
+          ritBadge.classList.remove('hidden');
+        } else {
+          ritBadge.classList.add('hidden');
+        }
+      }
+
+      // Hero profit badges in Top Header & Solver Card
+      const isLoss = currentHandData.hero_is_loss;
+      const isWin = currentHandData.hero_is_win;
+      const profitBadgeClass = isLoss
+        ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+        : (isWin ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-slate-800 text-slate-300 border-slate-700');
+
+      const headerProfitEl = document.getElementById('currentHandHeroProfit');
+      if (headerProfitEl) {
+        headerProfitEl.className = `px-2.5 py-1 rounded-md mono font-bold text-xs border flex items-center gap-1.5 ${profitBadgeClass}`;
+        headerProfitEl.innerHTML = `<span class="text-slate-400">Hero:</span> <span>${currentHandData.hero_net_formatted}</span>`;
+      }
+
+      const heroNetCard = document.getElementById('heroNetDisplay');
+      if (heroNetCard) {
+        heroNetCard.className = `px-2 py-0.5 rounded text-xs mono font-bold border ${profitBadgeClass}`;
+        heroNetCard.innerText = currentHandData.hero_net_formatted;
+      }
+
+      // Update Slider
+      const slider = document.getElementById('stepSlider');
+      slider.max = Math.max(0, currentHandData.total_steps - 1);
+      slider.value = currentStepIndex;
+
+      // Update Review Panel
+      const isReviewed = currentHandData.is_reviewed;
+      const reviewStatus = currentHandData.review_status || (currentHandData.marked_for_review ? 'review' : (isReviewed ? 'gto_ok' : 'not_reviewed'));
+      const reviewBadge = document.getElementById('solverReviewBadge');
+      const unreviewedBox = document.getElementById('unreviewedBox');
+      const mismatchBox = document.getElementById('mismatchBox');
+      const cleanBox = document.getElementById('cleanBox');
+      const statusIcon = document.getElementById('gtoStatusIcon');
+      const reasonsList = document.getElementById('mismatchReasonsList');
+      const countBadge = document.getElementById('mismatchCountBadge');
+
+      if (reviewStatus === 'review' && currentHandData.review_reasons && currentHandData.review_reasons.length > 0) {
+        reviewBadge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30";
+        reviewBadge.innerText = "⚠️ Marked for Review";
+        if (unreviewedBox) unreviewedBox.classList.add('hidden');
+        mismatchBox.classList.remove('hidden');
+        cleanBox.classList.add('hidden');
+        statusIcon.className = "w-9 h-9 rounded-full flex items-center justify-center text-lg bg-amber-500/20 text-amber-400 border border-amber-500/30";
+        statusIcon.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
+
+        countBadge.innerText = `${currentHandData.review_reasons.length} Issue${currentHandData.review_reasons.length > 1 ? 's' : ''}`;
+        
+        reasonsList.innerHTML = currentHandData.review_reasons.map(r => `
+          <div onclick="jumpToStreet('${r.street}')" class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 cursor-pointer space-y-2 shadow-md transition-all group" title="Click to jump replayer to ${r.street}">
+            <div class="flex items-center justify-between">
+              ${getStreetBadgeHTML(r.street)}
+              <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${r.villain_deviation ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'} tracking-wider">
+                ${r.villain_deviation ? 'VILLAIN OFF-TREE' : (r.action ? r.action.toUpperCase() : 'MISTAKE')}
+              </span>
+            </div>
+            <p class="text-xs text-slate-200 leading-relaxed font-normal">
+              ${highlightStreetsInText(r.explanation)}
+            </p>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
+              <span>Position: <strong class="text-teal-400 font-mono">${r.position || 'Hero'}</strong></span>
+              <span>Cards: <strong class="text-white font-mono">${r.cards || '--'}</strong></span>
+            </div>
+          </div>
+        `).join('');
+      } else if (reviewStatus === 'gto_ok') {
+        reviewBadge.className = "text-[11px] font-medium px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+        reviewBadge.innerText = "✅ GTO Verified";
+        if (unreviewedBox) unreviewedBox.classList.add('hidden');
+        mismatchBox.classList.add('hidden');
+        cleanBox.classList.remove('hidden');
+        statusIcon.className = "w-9 h-9 rounded-full flex items-center justify-center text-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+        statusIcon.innerHTML = `<i class="fa-solid fa-check"></i>`;
+      } else {
+        reviewBadge.className = "text-[11px] font-medium px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700";
+        reviewBadge.innerText = "⏳ Not Reviewed";
+        if (unreviewedBox) unreviewedBox.classList.remove('hidden');
+        mismatchBox.classList.add('hidden');
+        cleanBox.classList.add('hidden');
+        statusIcon.className = "w-9 h-9 rounded-full flex items-center justify-center text-lg bg-slate-800 text-slate-400 border border-slate-700";
+        statusIcon.innerHTML = `<i class="fa-solid fa-clock"></i>`;
+      }
+
+      // Hero cards display
+      const heroCardsDiv = document.getElementById('heroCardDisplay');
+      if (currentHandData.hero_cards && currentHandData.hero_cards.length > 0) {
+        heroCardsDiv.innerHTML = currentHandData.hero_cards.map(renderCardHTML).join('');
+      } else {
+        heroCardsDiv.innerHTML = '<span class="text-xs text-slate-500">None</span>';
+      }
+      document.getElementById('heroPosDisplay').innerText = currentHandData.hero_pos || 'Unknown';
+
+      renderCurrentStep();
+    }
+
+    function renderCurrentStep() {
+      if (!currentHandData || !currentHandData.steps) return;
+      const step = currentHandData.steps[currentStepIndex];
+      if (!step) return;
+
+      document.getElementById('stepCounter').innerText = `Step ${currentStepIndex + 1} / ${currentHandData.total_steps}`;
+      document.getElementById('stepSlider').value = currentStepIndex;
+
+      // Table pot
+      document.getElementById('tablePot').innerText = step.pot;
+
+      // Action banner with street highlight
+      const streetBadgeHtml = getStreetBadgeHTML(step.street);
+      const descText = step.action_desc || `Current street: ${step.display_street}`;
+      document.getElementById('actionBannerText').innerHTML = `
+        <span class="flex items-center gap-2">
+          ${streetBadgeHtml}
+          <span class="text-slate-200 font-semibold">${descText}</span>
+        </span>
+      `;
+
+      // Board Cards (with support for Run It Twice stacked layout)
+      const boardContainer = document.getElementById('boardCards');
+      boardContainer.innerHTML = '';
+
+      const hasRitBackendData = Boolean(step.is_run_twice && (step.run1_board && step.run1_board.length > 0));
+      const hasRitLengthFallback = Boolean(step.board && step.board.length > 5);
+
+      if (hasRitBackendData || hasRitLengthFallback) {
+        let sharedCards = [];
+        let run1Cards = [];
+        let run2Cards = [];
+
+        if (hasRitBackendData) {
+          sharedCards = step.shared_board || [];
+          run1Cards = step.run1_board || [];
+          run2Cards = step.run2_board || [];
+        } else {
+          // Fallback based on board card count
+          const b = step.board;
+          if (b.length === 6) {
+            sharedCards = b.slice(0, 4);
+            run1Cards = [b[4]];
+            run2Cards = [b[5]];
+          } else if (b.length === 7) {
+            sharedCards = b.slice(0, 3);
+            run1Cards = b.slice(3, 5);
+            run2Cards = b.slice(5, 7);
+          } else if (b.length === 10) {
+            sharedCards = [];
+            run1Cards = b.slice(0, 5);
+            run2Cards = b.slice(5, 10);
+          } else {
+            const mid = Math.floor(b.length / 2);
+            sharedCards = [];
+            run1Cards = b.slice(0, mid);
+            run2Cards = b.slice(mid);
+          }
+        }
+
+        let sharedHtml = '';
+        if (sharedCards.length > 0) {
+          sharedHtml = `
+            <div class="flex items-center gap-1.5">
+              ${sharedCards.map(renderCardHTML).join('')}
+            </div>
+          `;
+        }
+
+        const run1CardsHtml = run1Cards.map(renderCardHTML).join('');
+
+        let run2CardsHtml = '';
+        if (run2Cards.length > 0) {
+          run2CardsHtml = run2Cards.map(renderCardHTML).join('');
+        } else {
+          run2CardsHtml = run1Cards.map(() => `
+            <div class="w-9 h-12 rounded-md border border-dashed border-purple-400/50 bg-purple-950/20 flex flex-col items-center justify-center text-[10px] text-purple-300/60 shadow-sm" title="Waiting for Run 2">
+              <i class="fa-solid fa-hourglass-half text-[11px] animate-pulse"></i>
+            </div>
+          `).join('');
+        }
+
+        const dividerHtml = (sharedCards.length > 0)
+          ? `<div class="h-16 w-px bg-slate-700/60 mx-1 self-center"></div>`
+          : '';
+
+        boardContainer.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            ${sharedHtml}
+            ${dividerHtml}
+            <div class="flex flex-col gap-1.5 justify-center">
+              <!-- Run 1 (Top) -->
+              <div class="flex items-center gap-1.5 bg-slate-900/90 px-2 py-1 rounded-lg border border-teal-500/40 shadow-md">
+                <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/40 tracking-wider">
+                  1st
+                </span>
+                <div class="flex items-center gap-1">
+                  ${run1CardsHtml}
+                </div>
+              </div>
+
+              <!-- Run 2 (Bottom) -->
+              <div class="flex items-center gap-1.5 bg-slate-900/90 px-2 py-1 rounded-lg border border-purple-500/40 shadow-md">
+                <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 tracking-wider">
+                  2nd
+                </span>
+                <div class="flex items-center gap-1">
+                  ${run2CardsHtml}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (step.board && step.board.length > 0) {
+        step.board.forEach(card => {
+          boardContainer.innerHTML += renderCardHTML(card);
+        });
+      }
+
+      // Highlight active street tab in bottom toolbar
+      const activeStreet = (step.step_label === 'showdown' || (step.display_street || '').toLowerCase() === 'showdown' || (step.street || '').toLowerCase() === 'showdown') ? 'showdown' : step.street;
+      updateStreetTabsHighlight(activeStreet);
+
+      // Render Seats with Preferred Seating (Hero ALWAYS down and centered)
+      renderSeats(step.players, step.acting_seat, step.action_bubble);
+    }
+
+    function renderSeats(players, actingSeat, actionBubble) {
+      const container = document.getElementById('seatsContainer');
+      container.innerHTML = '';
+      if (!players || players.length === 0) return;
+
+      // Rotate players so HERO is ALWAYS index 0 (down and center!)
+      let heroIdx = players.findIndex(p => p.is_hero);
+      if (heroIdx === -1) heroIdx = 0;
+
+      const orderedPlayers = [];
+      for (let i = 0; i < players.length; i++) {
+        orderedPlayers.push(players[(heroIdx + i) % players.length]);
+      }
+
+      // Responsive layout: Hero always at { left: 50, top: 88, dir: 'top' } (bottom center)
+      const count = orderedPlayers.length;
+      let seatPositions = [];
+
+      if (count <= 2) {
+        seatPositions = [
+          { left: 50, top: 88, dir: 'top' },    // Hero (Bottom Center)
+          { left: 50, top: 12, dir: 'bottom' }, // Opponent (Top Center)
+        ];
+      } else if (count === 3) {
+        seatPositions = [
+          { left: 50, top: 88, dir: 'top' },        // Hero (Bottom Center)
+          { left: 18, top: 25, dir: 'top-right' },  // Top-Left (arrow on player side)
+          { left: 82, top: 25, dir: 'top-left' },   // Top-Right (arrow on player side)
+        ];
+      } else if (count === 4) {
+        seatPositions = [
+          { left: 50, top: 88, dir: 'top' },        // Hero (Bottom Center)
+          { left: 16, top: 48, dir: 'right' },      // Left
+          { left: 50, top: 10, dir: 'bottom' },     // Top
+          { left: 84, top: 48, dir: 'left' },       // Right
+        ];
+      } else if (count === 5) {
+        seatPositions = [
+          { left: 50, top: 88, dir: 'top' },        // Hero (Bottom Center)
+          { left: 16, top: 68, dir: 'top' },        // Bottom-Left (Over cards)
+          { left: 24, top: 18, dir: 'top-right' },  // Top-Left (Upper player arrow on player side)
+          { left: 76, top: 18, dir: 'top-left' },   // Top-Right (Upper player arrow on player side)
+          { left: 84, top: 68, dir: 'top' },        // Bottom-Right (Over cards)
+        ];
+      } else {
+        // 6-Max
+        seatPositions = [
+          { left: 50, top: 88, dir: 'top' },        // Hero (Bottom Center)
+          { left: 16, top: 70, dir: 'top' },        // Bottom-Left (Over cards)
+          { left: 16, top: 22, dir: 'top-right' },  // Top-Left (arrow on player side)
+          { left: 50, top: 8,  dir: 'bottom' },     // Top-Center
+          { left: 84, top: 22, dir: 'top-left' },   // Top-Right (arrow on player side)
+          { left: 84, top: 70, dir: 'top' },        // Bottom-Right (Over cards)
+        ];
+      }
+
+      orderedPlayers.forEach((player, idx) => {
+        const pos = seatPositions[idx % seatPositions.length];
+        const seatEl = document.createElement('div');
+        seatEl.className = `absolute transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto flex flex-col items-center`;
+        seatEl.style.left = `${pos.left}%`;
+        seatEl.style.top = `${pos.top}%`;
+
+        const isHero = Boolean(player.is_hero);
+        const isActive = Boolean(player.is_active);
+        const isLastStep = Boolean(currentHandData && currentStepIndex === currentHandData.total_steps - 1);
+
+        // Check for available villain cards at the last step
+        const availableVillainCards = (!isHero)
+          ? ((player.cards && player.cards.length > 0 && player.cards[0] !== 'back')
+              ? player.cards
+              : (player.known_cards && player.known_cards.length > 0
+                  ? player.known_cards
+                  : (currentHandData && currentHandData.known_player_cards ? currentHandData.known_player_cards[player.seat] : null)))
+          : null;
+
+        // Card rendering rules:
+        // - Villains:
+        //     - At the last step of the replay: show villain hands when available!
+        //     - During replay before last step: show card backs if active, no cards if folded
+        // - Hero: show hero hole cards if active, no cards if folded
+        let cardsHtml = '';
+        let hasCards = false;
+
+        if (isActive) {
+          if (isHero) {
+            const hCards = (player.cards && player.cards.length > 0) ? player.cards : (currentHandData.hero_cards || []);
+            if (hCards && hCards.length > 0) {
+              cardsHtml = `<div class="flex gap-1 -mb-3 z-10">${hCards.map(renderCardHTML).join('')}</div>`;
+              hasCards = true;
+            }
+          } else {
+            // Villain is STILL in the hand:
+            if ((isLastStep || (player.cards && player.cards.length > 0 && player.cards[0] !== 'back')) && availableVillainCards && availableVillainCards.length > 0) {
+              // At showdown or when villain cards were revealed (e.g. all-in): show villain hands!
+              cardsHtml = `<div class="flex gap-1 -mb-3 z-10">${availableVillainCards.map(renderCardHTML).join('')}</div>`;
+              hasCards = true;
+            } else {
+              // During hand replay: show back of cards
+              cardsHtml = `<div class="flex gap-1 -mb-3 z-10">${renderCardHTML('back')}${renderCardHTML('back')}</div>`;
+              hasCards = true;
+            }
+          }
+        } else {
+          // Inactive / Folded:
+          // If at the last step and villain cards were revealed at showdown:
+          if (isLastStep && availableVillainCards && availableVillainCards.length > 0) {
+            cardsHtml = `<div class="flex gap-1 -mb-3 z-10">${availableVillainCards.map(renderCardHTML).join('')}</div>`;
+            hasCards = true;
+          } else {
+            cardsHtml = '';
+            hasCards = false;
+          }
+        }
+
+        const isActingNow = player.is_acting_now || (actingSeat !== null && player.seat === actingSeat);
+        const bubbleData = player.bubble || (isActingNow ? actionBubble : null);
+
+        // Styling: active players bright, inactive players grayed out
+        let seatBoxClass = '';
+        let posBadgeClass = '';
+        let nameClass = '';
+        let stackClass = '';
+        let foldStatusBadge = '';
+
+        if (isActive) {
+          seatBoxClass = isHero
+            ? 'bg-slate-950/95 border-teal-400 shadow-xl shadow-teal-500/25 ring-1 ring-teal-400/30 opacity-100'
+            : 'bg-slate-950/90 border-slate-700/80 shadow-xl opacity-100';
+          posBadgeClass = isHero ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40' : 'bg-slate-800 text-teal-400';
+          nameClass = 'text-white font-semibold';
+          stackClass = 'text-emerald-400 font-bold';
+        } else {
+          // Grayed out when not in hand
+          seatBoxClass = 'bg-slate-950/40 border-slate-800/60 opacity-35 grayscale brightness-75 shadow-none';
+          posBadgeClass = 'bg-slate-900/80 text-slate-500';
+          nameClass = 'text-slate-500 font-normal';
+          stackClass = 'text-slate-500 font-medium';
+          if (!isActingNow) {
+            foldStatusBadge = `<span class="px-1.5 py-0.5 rounded bg-slate-900/90 border border-slate-700/60 text-slate-400 font-bold text-[9px] uppercase tracking-wider">FOLDED</span>`;
+          }
+        }
+
+        let betPill = '';
+        if (isActive && player.current_bet && player.current_bet !== '$0') {
+          betPill = `
+            <div class="mt-1 px-2.5 py-0.5 rounded-full bg-slate-900 border border-emerald-500/50 text-emerald-400 font-bold mono text-[11px] shadow-md flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>${player.current_bet}</span>
+            </div>
+          `;
+        }
+
+        const btnBadge = player.is_button ? `<span class="w-4 h-4 rounded-full bg-amber-400 text-slate-950 font-black text-[9px] flex items-center justify-center shadow">D</span>` : '';
+        const heroTag = isHero && isActive 
+          ? `<span class="px-1 py-0.2 rounded bg-teal-500/30 text-teal-300 font-extrabold text-[9px] tracking-wider">HERO</span>` 
+          : (isHero ? `<span class="px-1 py-0.2 rounded bg-slate-800 text-slate-500 font-extrabold text-[9px] tracking-wider">HERO</span>` : '');
+
+        // Active speech bubble pointing directly at this player
+        const speechBubbleHtml = isActingNow && bubbleData ? renderSpeechBubbleHTML(bubbleData, pos.dir, hasCards) : '';
+
+        seatEl.innerHTML = `
+          ${speechBubbleHtml}
+          ${cardsHtml}
+          <div class="px-3 py-1.5 rounded-xl border ${seatBoxClass} flex items-center gap-2 backdrop-blur-md min-w-[124px] justify-between relative transition-all duration-150">
+            <div class="flex items-center gap-1.5">
+              <span class="px-1.5 py-0.5 rounded ${posBadgeClass} text-[10px] mono font-bold">${player.pos}</span>
+              <div class="flex flex-col">
+                <div class="flex items-center gap-1">
+                  <span class="text-xs ${nameClass} truncate max-w-[70px]">${player.name}</span>
+                  ${heroTag}
+                </div>
+                <span class="text-[10px] ${stackClass} mono">${player.stack}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-1">
+              ${foldStatusBadge}
+              ${btnBadge}
+            </div>
+          </div>
+          ${betPill}
+        `;
+        container.appendChild(seatEl);
+      });
+    }
+
+    // Step navigation
+    function stepForward() {
+      if (!currentHandData) return;
+      if (currentStepIndex < currentHandData.total_steps - 1) {
+        currentStepIndex++;
+        renderCurrentStep();
+      } else {
+        pauseReplay();
+      }
+    }
+
+    function stepBack() {
+      if (!currentHandData) return;
+      if (currentStepIndex > 0) {
+        currentStepIndex--;
+        renderCurrentStep();
+      }
+    }
+
+    function goToStart() {
+      currentStepIndex = 0;
+      renderCurrentStep();
+    }
+
+    function goToEnd() {
+      if (!currentHandData) return;
+      currentStepIndex = currentHandData.total_steps - 1;
+      renderCurrentStep();
+    }
+
+    function onSliderChange(val) {
+      currentStepIndex = parseInt(val, 10);
+      renderCurrentStep();
+    }
+
+    function jumpToStreet(streetName) {
+      if (!currentHandData || !currentHandData.steps) return;
+      const target = (streetName || '').toLowerCase();
+      let idx = -1;
+      if (target === 'showdown') {
+        idx = currentHandData.steps.findIndex(s => 
+          (s.street && s.street.toLowerCase() === 'showdown') || 
+          (s.step_label && s.step_label.toLowerCase() === 'showdown') || 
+          (s.display_street && s.display_street.toLowerCase() === 'showdown')
+        );
+        if (idx === -1) {
+          idx = currentHandData.steps.length - 1;
+        }
+      } else {
+        idx = currentHandData.steps.findIndex(s => 
+          (s.street && s.street.toLowerCase() === target) ||
+          (s.step_label && s.step_label.toLowerCase() === target) ||
+          (s.display_street && s.display_street.toLowerCase() === target)
+        );
+      }
+      if (idx !== -1) {
+        currentStepIndex = idx;
+        renderCurrentStep();
+      }
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        pauseReplay();
+      } else {
+        startReplay();
+      }
+    }
+
+    function startReplay() {
+      if (!currentHandData) return;
+      if (currentStepIndex >= currentHandData.total_steps - 1) {
+        currentStepIndex = 0;
+      }
+      isPlaying = true;
+      document.getElementById('playIcon').className = "fa-solid fa-pause";
+      playInterval = setInterval(() => {
+        if (currentStepIndex < currentHandData.total_steps - 1) {
+          stepForward();
+        } else {
+          pauseReplay();
+        }
+      }, 1200);
+    }
+
+    function pauseReplay() {
+      isPlaying = false;
+      document.getElementById('playIcon').className = "fa-solid fa-play";
+      if (playInterval) clearInterval(playInterval);
+    }
+
+    function resetSolverButtonsUI() {
+      const btn = document.getElementById('btnRunSolver');
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-robot"></i> <span id="btnRunSolverText">Run RocketSolver Check</span> <span id="btnRunSolverBadge" class="hidden px-1.5 py-0.5 rounded bg-black/40 text-[10px] mono font-bold border border-emerald-400/40"></span>`;
+      }
+      const btnSingle = document.getElementById('btnReviewSingleHeader');
+      if (btnSingle) {
+        btnSingle.disabled = false;
+        btnSingle.innerHTML = `<i class="fa-solid fa-crosshairs text-teal-400"></i> <span>Review This Hand</span>`;
+      }
+      const btnToolbar = document.getElementById('btnReviewCurrent');
+      if (btnToolbar) {
+        btnToolbar.disabled = false;
+        btnToolbar.innerHTML = `<i class="fa-solid fa-microchip text-[10px]"></i> <span>Review Hand</span>`;
+      }
+      const btnCancel = document.getElementById('btnCancelSolver');
+      if (btnCancel) {
+        btnCancel.disabled = false;
+        btnCancel.innerHTML = `<i class="fa-solid fa-circle-stop"></i> <span>Cancel</span> <kbd class="px-1.5 py-0.5 rounded bg-black/40 text-[9px] font-mono border border-white/20">Esc</kbd>`;
+      }
+      updateSolverButtonState();
+    }
+
+    async function cancelSolverCheck() {
+      const cancelBtn = document.getElementById('btnCancelSolver');
+      if (cancelBtn) {
+        cancelBtn.disabled = true;
+        cancelBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-[10px]"></i> Cancelling...`;
+      }
+      const bannerText = document.getElementById('actionBannerText');
+      if (bannerText) bannerText.innerText = "Cancelling RocketSolver operation (Esc pressed)...";
+
+      try {
+        await fetch('/api/cancel_solver', { method: 'POST' });
+      } catch (e) {
+        console.error("Cancel solver error:", e);
+      }
+    }
+
+    // Cancel solver automation when Escape key is pressed in browser
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        const container = document.getElementById('progressBarContainer');
+        const isProgressActive = container && !container.classList.contains('hidden');
+        if (isProgressActive) {
+          e.preventDefault();
+          cancelSolverCheck();
+        }
+      }
+    });
+
+    async function reviewCurrentHand() {
+      if (!currentHandData) {
+        alert("Please select a hand to review first.");
+        return;
+      }
+      await reviewSpecificHand(currentHandData.hand_id);
+    }
+
+    async function reviewSpecificHand(handId, event) {
+      if (event) event.stopPropagation();
+      if (!currentHandData || currentHandData.hand_id !== handId) {
+        await selectHand(handId);
+      }
+
+      const btnRun = document.getElementById('btnRunSolver');
+      if (btnRun) btnRun.disabled = true;
+      const btnSingle = document.getElementById('btnReviewSingleHeader');
+      if (btnSingle) {
+        btnSingle.disabled = true;
+        btnSingle.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-teal-400 text-xs"></i> <span>Reviewing...</span>`;
+      }
+      const btnToolbar = document.getElementById('btnReviewCurrent');
+      if (btnToolbar) {
+        btnToolbar.disabled = true;
+        btnToolbar.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-[10px]"></i> <span>Reviewing...</span>`;
+      }
+
+      const bannerText = document.getElementById('actionBannerText');
+      if (bannerText) bannerText.innerText = `Analyzing hand ${handId} against RocketSolver GTO ranges...`;
+
+      showProgressBar(`Connecting to RocketSolver to review Hand ${handId}...`);
+
+      try {
+        await fetch('/api/check_solver', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            hand_ids: [handId],
+            skip_reviewed: false
+          })
+        });
+        startProgressPolling();
+      } catch (e) {
+        hideProgressBar();
+        alert("Error starting review for hand: " + e.message);
+        resetSolverButtonsUI();
+      }
+    }
+
+    // Run live RocketSolver verification with background progress
+    async function runSolverVerification() {
+      const filteredHands = getHeroNetFilteredHands();
+      if (filteredHands.length === 0) {
+        alert("No hands match the current filter.");
+        return;
+      }
+
+      const unchecked = filteredHands.filter(h => !h.is_reviewed || h.review_status === 'not_reviewed');
+      const alreadyCheckedCount = filteredHands.length - unchecked.length;
+
+      if (unchecked.length === 0) {
+        const modeWord = heroNetMode === 'loss' ? 'Lost' : (heroNetMode === 'win' ? 'Won' : '|Won/Lost|');
+        const amtDesc = minHeroNetFilterCents > 0 ? ` with Hero ${modeWord} ≥ $${(minHeroNetFilterCents/100).toFixed(2)}` : '';
+        alert(`All ${filteredHands.length} hands${amtDesc} have already been checked!\n\nTo check more hands, reduce the filter amount or click "Review This Hand" to re-check a specific hand.`);
+        return;
+      }
+
+      const btn = document.getElementById('btnRunSolver');
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Checking RocketSolver...`;
+
+      const btnSingle = document.getElementById('btnReviewSingleHeader');
+      if (btnSingle) btnSingle.disabled = true;
+      const btnToolbar = document.getElementById('btnReviewCurrent');
+      if (btnToolbar) btnToolbar.disabled = true;
+
+      const msg = alreadyCheckedCount > 0
+        ? `Connecting to RocketSolver (Analyzing ${unchecked.length} hands, skipping ${alreadyCheckedCount} already checked)...`
+        : `Connecting to RocketSolver (Analyzing ${unchecked.length} filtered hands)...`;
+      showProgressBar(msg);
+
+      try {
+        const targetHandIds = filteredHands.map(h => h.hand_id);
+        await fetch('/api/check_solver', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            min_hero_net: minHeroNetFilterCents > 0 ? (minHeroNetFilterCents / 100) : null,
+            net_mode: heroNetMode,
+            hand_ids: targetHandIds,
+            skip_reviewed: true
+          })
+        });
+        startProgressPolling();
+      } catch (e) {
+        hideProgressBar();
+        alert("Error starting solver check: " + e.message);
+        resetSolverButtonsUI();
+      }
+    }
+
+    function showProgressBar(msg) {
+      const container = document.getElementById('progressBarContainer');
+      container.classList.remove('hidden');
+      document.getElementById('progressMessage').innerText = msg;
+      document.getElementById('progressBarFill').style.width = '5%';
+      document.getElementById('progressPctText').innerText = '5%';
+      const cancelBtn = document.getElementById('btnCancelSolver');
+      if (cancelBtn) {
+        cancelBtn.disabled = false;
+        cancelBtn.innerHTML = `<i class="fa-solid fa-circle-stop"></i> <span>Cancel</span> <kbd class="px-1.5 py-0.5 rounded bg-black/40 text-[9px] font-mono border border-white/20">Esc</kbd>`;
+      }
+    }
+
+    function hideProgressBar() {
+      const container = document.getElementById('progressBarContainer');
+      container.classList.add('hidden');
+    }
+
+    function startProgressPolling() {
+      if (progressPollInterval) clearInterval(progressPollInterval);
+      progressPollInterval = setInterval(async () => {
+        try {
+          const res = await fetch('/api/progress');
+          const data = await res.json();
+
+          document.getElementById('progressMessage').innerText = data.message;
+          document.getElementById('progressBarFill').style.width = `${data.percent}%`;
+          document.getElementById('progressPctText').innerText = `${data.percent}%`;
+
+          // Append to log box
+          const logBox = document.getElementById('solverLogs');
+          if (data.logs && data.logs.length > 0) {
+            logBox.innerHTML = '';
+            data.logs.forEach(line => {
+              const p = document.createElement('p');
+              if (line.includes('[FLAGGED]')) {
+                p.className = 'text-amber-400 font-semibold';
+              } else if (line.includes('[PASSED]')) {
+                p.className = 'text-emerald-400';
+              } else if (line.includes('[SKIPPED]')) {
+                p.className = 'text-teal-400 font-semibold';
+              } else if (line.includes('[CANCELLED]') || line.includes('[CANCEL]')) {
+                p.className = 'text-rose-400 font-semibold';
+              } else {
+                p.className = 'text-slate-400';
+              }
+              p.innerText = line;
+              logBox.appendChild(p);
+            });
+            logBox.scrollTop = logBox.scrollHeight;
+          }
+
+          if ((data.status === 'idle' && data.percent >= 100) || data.status === 'cancelled') {
+            clearInterval(progressPollInterval);
+            setTimeout(hideProgressBar, 2000);
+            resetSolverButtonsUI();
+            const activeHandId = currentHandData ? currentHandData.hand_id : null;
+            await loadHands();
+            if (activeHandId) {
+              await selectHand(activeHandId);
+            }
+          }
+        } catch (e) {
+          console.error("Progress poll error:", e);
+        }
+      }, 700);
+    }
+
+    // Upload Modal functions
+    function openUploadModal() {
+      document.getElementById('uploadModal').classList.remove('hidden');
+      selectedUploadFiles = [];
+      updateSelectedFilesList();
+    }
+    function closeUploadModal() {
+      document.getElementById('uploadModal').classList.add('hidden');
+      document.getElementById('importTextInput').value = '';
+      selectedUploadFiles = [];
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      document.getElementById('dropZone').classList.add('drag-over');
+    }
+    function handleDragLeave(e) {
+      e.preventDefault();
+      document.getElementById('dropZone').classList.remove('drag-over');
+    }
+    function handleDrop(e) {
+      e.preventDefault();
+      document.getElementById('dropZone').classList.remove('drag-over');
+      if (e.dataTransfer.files) {
+        addFiles(Array.from(e.dataTransfer.files));
+      }
+    }
+    function handleFileSelect(e) {
+      if (e.target.files) {
+        addFiles(Array.from(e.target.files));
+      }
+    }
+
+    function addFiles(files) {
+      const txtFiles = files.filter(f => f.name.endsWith('.txt'));
+      selectedUploadFiles = selectedUploadFiles.concat(txtFiles);
+      updateSelectedFilesList();
+    }
+
+    function updateSelectedFilesList() {
+      const box = document.getElementById('selectedFilesBox');
+      if (selectedUploadFiles.length === 0) {
+        box.classList.add('hidden');
+        box.innerHTML = '';
+        return;
+      }
+      box.classList.remove('hidden');
+      box.innerHTML = `<div class="font-semibold text-teal-400 mb-1">Selected ${selectedUploadFiles.length} file(s):</div>` +
+        selectedUploadFiles.map(f => `<div>📄 ${f.name} (${(f.size/1024).toFixed(1)} KB)</div>`).join('');
+    }
+
+    async function submitUpload() {
+      const text = document.getElementById('importTextInput').value.trim();
+      const btn = document.getElementById('btnSubmitUpload');
+
+      if (selectedUploadFiles.length === 0 && !text) {
+        alert("Please select files or paste hand text.");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Importing...";
+      showProgressBar("Importing hands...");
+
+      try {
+        if (selectedUploadFiles.length > 0) {
+          // Read all files
+          const payloads = [];
+          for (let f of selectedUploadFiles) {
+            const content = await readFileAsText(f);
+            payloads.push({ name: f.name, content: content });
+          }
+
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ files: payloads })
+          });
+          const data = await res.json();
+          if (data.success) {
+            closeUploadModal();
+            await loadHands();
+          } else {
+            alert("Upload failed: " + (data.error || "Unknown error"));
+          }
+        } else if (text) {
+          const res = await fetch('/api/import', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: text })
+          });
+          const data = await res.json();
+          if (data.success) {
+            closeUploadModal();
+            await loadHands();
+          } else {
+            alert("Import failed: " + (data.message || data.error));
+          }
+        }
+      } catch (e) {
+        alert("Error during upload: " + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Convert & Import Hands";
+        hideProgressBar();
+      }
+    }
+
+    function readFileAsText(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = e => reject(e);
+        reader.readAsText(file);
+      });
+    }
+
+    // Initialize on load
+    window.onload = () => {
+      loadHands();
+    };
+  </script>
+</body>
+</html>

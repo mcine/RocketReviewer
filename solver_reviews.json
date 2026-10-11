@@ -1,0 +1,4027 @@
+{
+  "RC4868419055": {
+    "hand_id": "RC4868419055",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 3,
+    "hero_pos": "BB",
+    "hero_cards": [
+      "7c",
+      "Qc"
+    ],
+    "board": [
+      "5d",
+      "8c",
+      "9s",
+      "2s",
+      "3c"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "River",
+        "action": "Bet",
+        "cards": "7c Qc",
+        "position": "BB",
+        "explanation": "River: Hero bet 7c Qc (Q7s) from BB. In RocketSolver active solution, Q7s has 0.0% frequency (Check: 100.0%, Bet: 0.0%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.0,
+          "call": 1.0,
+          "fold": 0.0,
+          "bet": 0.0,
+          "check": 1.0,
+          "bet_small": 0.0,
+          "bet_big": 0.0,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 221
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.75",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "call",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "bet",
+        "amount": "$0.75",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "call",
+        "amount": "$0.75",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 3,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 3,
+        "action": "bet",
+        "amount": "$4.13",
+        "solver_match": false
+      },
+      {
+        "street": "River",
+        "seat": 5,
+        "action": "call",
+        "amount": "$4.13",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": -563,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868416621": {
+    "hand_id": "RC4868416621",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 6,
+    "hero_pos": "CO",
+    "hero_cards": [
+      "Kd",
+      "Jd"
+    ],
+    "board": [
+      "4d",
+      "6d",
+      "3h",
+      "6c",
+      "8s"
+    ],
+    "marked_for_review": false,
+    "review_reasons": [],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$1.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "call",
+        "amount": "$1.00",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "bet",
+        "amount": "$1.11",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$3.90",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$2.79",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 6,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 6,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": -540,
+    "is_reviewed": true,
+    "review_status": "gto_ok"
+  },
+  "RC4868415768": {
+    "hand_id": "RC4868415768",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 5,
+    "hero_pos": "MP",
+    "hero_cards": [
+      "Kc",
+      "Ks"
+    ],
+    "board": [
+      "4d",
+      "8s",
+      "2d",
+      "8d",
+      "Ah"
+    ],
+    "marked_for_review": false,
+    "review_reasons": [],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$1.72",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$4.75",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$3.03",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "bet",
+        "amount": "$3.26",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$3.26",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 6,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 6,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": 724,
+    "is_reviewed": true,
+    "review_status": "gto_ok"
+  },
+  "RC4868415451": {
+    "hand_id": "RC4868415451",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 2,
+    "hero_pos": "SB",
+    "hero_cards": [
+      "Qc",
+      "Kd"
+    ],
+    "board": [
+      "2h",
+      "Ad",
+      "6c",
+      "Td"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Turn",
+        "action": "Fold",
+        "cards": "Qc Kd",
+        "position": "SB",
+        "explanation": "Turn: Hero folded Qc Kd (KQo) from SB. In RocketSolver active solution, KQo has 0.0% frequency (Fold: 0.0%, Call: 100.0%, Raise: 0.0%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.0,
+          "call": 1.0,
+          "fold": 0.0,
+          "bet": 0.0,
+          "check": 1.0,
+          "bet_small": 0.0,
+          "bet_big": 0.0,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 249
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "raise",
+        "amount": "$2.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$2.00",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "bet",
+        "amount": "$1.74",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$1.74",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 2,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$4.99",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": -424,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868372956": {
+    "hand_id": "RC4868372956",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 1,
+    "hero_pos": "BU",
+    "hero_cards": [
+      "Jh",
+      "Jc"
+    ],
+    "board": [
+      "Td",
+      "7h",
+      "9h"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Preflop",
+        "action": "Raise",
+        "cards": "Jh Jc",
+        "position": "BU",
+        "explanation": "Preflop: Hero raised Jh Jc (JJ) from BU. In RocketSolver active solution, JJ has 2.2% frequency (Fold: 97.8%, Call: 0.0%, Raise: 2.2%). This action deviates significantly from GTO strategy (hand has to be folded). Check ended.",
+        "solver_strategy": {
+          "raise": 0.022,
+          "call": 0.0,
+          "fold": 0.978,
+          "bet": 0.022,
+          "check": 0.0,
+          "bet_small": 0.022,
+          "bet_big": 0.0,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 1395
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": 280,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868372767": {
+    "hand_id": "RC4868372767",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 3,
+    "hero_pos": "BB",
+    "hero_cards": [
+      "Ks",
+      "Kc"
+    ],
+    "board": [
+      "4d",
+      "Kd",
+      "Ah"
+    ],
+    "marked_for_review": false,
+    "review_reasons": [],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$1.52",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "raise",
+        "amount": "$4.75",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$3.23",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "bet",
+        "amount": "$3.34",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": 450,
+    "is_reviewed": true,
+    "review_status": "gto_ok"
+  },
+  "RC4868368038": {
+    "hand_id": "RC4868368038",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 1,
+    "hero_pos": "BU",
+    "hero_cards": [
+      "8d",
+      "8h"
+    ],
+    "board": [
+      "2s",
+      "5c",
+      "Ks",
+      "Td",
+      "7h"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "River",
+        "action": "Bet",
+        "cards": "Jh Ts",
+        "position": "SB",
+        "explanation": "River: Villain 9221a487 in SB bet $4.12, but in RocketSolver's solution SB has no bet button at this node (only Check is allowed in the GTO tree). Villain took an off-tree action deviating from GTO strategy.",
+        "villain_deviation": true
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "raise",
+        "amount": "$2.35",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$1.77",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "bet",
+        "amount": "$1.64",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$1.64",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 2,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 1,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 2,
+        "action": "bet",
+        "amount": "$4.12",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": -811,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868368320": {
+    "hand_id": "RC4868368320",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 3,
+    "hero_pos": "BB",
+    "hero_cards": [
+      "8h",
+      "8d"
+    ],
+    "board": [
+      "8c",
+      "3s",
+      "4c"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Preflop",
+        "action": "Raise",
+        "cards": "8h 8d",
+        "position": "BB",
+        "explanation": "Preflop: Hero raised 8h 8d (88) from BB. In RocketSolver active solution, 88 has 0.0% frequency (Fold: 100.0%, Call: 0.0%, Raise: 0.0%). This action deviates significantly from GTO strategy (hand has to be folded). Check ended.",
+        "solver_strategy": {
+          "raise": 0.0,
+          "call": 0.0,
+          "fold": 1.0,
+          "bet": 0.0,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.0,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 1411
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "call",
+        "amount": "$0.25",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "call",
+        "amount": "$0.40",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "raise",
+        "amount": "$2.50",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": 452,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868368466": {
+    "hand_id": "RC4868368466",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 5,
+    "hero_pos": "MP",
+    "hero_cards": [
+      "Qc",
+      "As"
+    ],
+    "board": [
+      "2h",
+      "Qs",
+      "Tc",
+      "Qd",
+      "9h"
+    ],
+    "marked_for_review": false,
+    "review_reasons": [],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$1.90",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "call",
+        "amount": "$1.32",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$1.66",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "call",
+        "amount": "$1.66",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 1,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 5,
+        "action": "bet",
+        "amount": "$9.94",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": 354,
+    "is_reviewed": true,
+    "review_status": "gto_ok"
+  },
+  "RC4868280864": {
+    "hand_id": "RC4868280864",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 5,
+    "hero_pos": "MP",
+    "hero_cards": [
+      "Kd",
+      "Ac"
+    ],
+    "board": [
+      "5d",
+      "6s",
+      "6h",
+      "Th"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Flop",
+        "action": "Check",
+        "cards": "Kd Ac",
+        "position": "MP",
+        "explanation": "Flop: Hero checked Kd Ac (AKo) from MP. In RocketSolver active solution, AKo has 1.2% frequency (Check: 1.2%, Bet: 98.8%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.988,
+          "call": 0.012,
+          "fold": 0.0,
+          "bet": 0.988,
+          "check": 0.012,
+          "bet_small": 0.689,
+          "bet_big": 0.227,
+          "all_in": 0.072,
+          "in_range": true,
+          "total_colored_pixels": 925
+        }
+      },
+      {
+        "street": "Turn",
+        "action": "Check",
+        "cards": "Kd Ac",
+        "position": "MP",
+        "explanation": "Turn: Hero checked Kd Ac (AKo) from MP. In RocketSolver active solution, AKo has 0.0% frequency (Check: 0.0%, Bet: 100.0%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 1.0,
+          "call": 0.0,
+          "fold": 0.0,
+          "bet": 1.0,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.969,
+          "all_in": 0.031,
+          "in_range": true,
+          "total_colored_pixels": 227
+        }
+      },
+      {
+        "street": "Turn",
+        "action": "Fold",
+        "cards": "Kd Ac",
+        "position": "MP",
+        "explanation": "Turn: Hero folded Kd Ac (AKo) from MP. In RocketSolver active solution, AKo has 4.8% frequency (Fold: 4.8%, Call: 0.0%, Raise: 95.2%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.952,
+          "call": 0.0,
+          "fold": 0.048,
+          "bet": 0.952,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.952,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 227
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$2.00",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$5.75",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$3.75",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": false
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": false
+      },
+      {
+        "street": "Turn",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$8.77",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": -575,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868280987": {
+    "hand_id": "RC4868280987",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 2,
+    "hero_pos": "SB",
+    "hero_cards": [
+      "Qh",
+      "Qs"
+    ],
+    "board": [
+      "6s",
+      "7d",
+      "3h",
+      "6c"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Turn",
+        "action": "Check",
+        "cards": "Qh Qs",
+        "position": "SB",
+        "explanation": "Turn: Hero checked Qh Qs (QQ) from SB. In RocketSolver active solution, QQ has 0.0% frequency (Check: 0.0%, Bet: 100.0%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 1.0,
+          "call": 0.0,
+          "fold": 0.0,
+          "bet": 1.0,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.962,
+          "all_in": 0.038,
+          "in_range": true,
+          "total_colored_pixels": 208
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.63",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "raise",
+        "amount": "$2.75",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "call",
+        "amount": "$2.12",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "bet",
+        "amount": "$2.88",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "call",
+        "amount": "$2.88",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 2,
+        "action": "check",
+        "amount": "",
+        "solver_match": false
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "bet",
+        "amount": "$3.80",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 2,
+        "action": "raise",
+        "amount": "$21.83",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": 856,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868284110": {
+    "hand_id": "RC4868284110",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 2,
+    "hero_pos": "SB",
+    "hero_cards": [
+      "Kh",
+      "As"
+    ],
+    "board": [
+      "Th",
+      "5s",
+      "Jd",
+      "6s",
+      "6d"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Turn",
+        "action": "Call",
+        "cards": "Kh As",
+        "position": "SB",
+        "explanation": "Turn: Hero called Kh As (AKo) from SB. In RocketSolver active solution, AKo has 0.0% frequency (Fold: 78.9%, Call: 0.0%, Raise: 21.1%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.211,
+          "call": 0.0,
+          "fold": 0.789,
+          "bet": 0.211,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.211,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 853
+        }
+      },
+      {
+        "street": "Turn",
+        "action": "Call",
+        "cards": "Kh As",
+        "position": "SB",
+        "explanation": "Turn: Hero called Kh As (AKo) from SB. In RocketSolver active solution, AKo has 0.0% frequency (Fold: 7.1%, Call: 0.0%, Raise: 92.9%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.929,
+          "call": 0.0,
+          "fold": 0.071,
+          "bet": 0.929,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.929,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 226
+        }
+      },
+      {
+        "street": "River",
+        "action": "Check",
+        "cards": "Kh As",
+        "position": "SB",
+        "explanation": "River: Hero checked Kh As (AKo) from SB. In RocketSolver active solution, AKo has 0.0% frequency (Check: 0.0%, Bet: 100.0%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 1.0,
+          "call": 0.0,
+          "fold": 0.0,
+          "bet": 1.0,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.969,
+          "all_in": 0.031,
+          "in_range": true,
+          "total_colored_pixels": 227
+        }
+      },
+      {
+        "street": "River",
+        "action": "Bet",
+        "cards": "--",
+        "position": "BB",
+        "explanation": "River: Villain 2a7b641d in BB bet $126.56, but in RocketSolver's solution BB has no bet button at this node (only Check is allowed in the GTO tree). Villain took an off-tree action deviating from GTO strategy.",
+        "villain_deviation": true
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "call",
+        "amount": "$0.25",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "raise",
+        "amount": "$1.25",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "call",
+        "amount": "$1.00",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "call",
+        "amount": "$1.00",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 4,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 2,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 3,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 4,
+        "action": "bet",
+        "amount": "$1.88",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 2,
+        "action": "call",
+        "amount": "$1.88",
+        "solver_match": false
+      },
+      {
+        "street": "Turn",
+        "seat": 3,
+        "action": "raise",
+        "amount": "$4.75",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 2,
+        "action": "call",
+        "amount": "$2.87",
+        "solver_match": false
+      },
+      {
+        "street": "River",
+        "seat": 2,
+        "action": "check",
+        "amount": "",
+        "solver_match": false
+      },
+      {
+        "street": "River",
+        "seat": 3,
+        "action": "bet",
+        "amount": "$126.56",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": -600,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868304897": {
+    "hand_id": "RC4868304897",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 5,
+    "hero_pos": "MP",
+    "hero_cards": [
+      "Ah",
+      "Th"
+    ],
+    "board": [
+      "3d",
+      "Tc",
+      "4s",
+      "5h",
+      "7d"
+    ],
+    "marked_for_review": false,
+    "review_reasons": [],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "bet",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "bet",
+        "amount": "$1.89",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 1,
+        "action": "call",
+        "amount": "$1.89",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 5,
+        "action": "bet",
+        "amount": "$3.15",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$9.45",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": -612,
+    "is_reviewed": true,
+    "review_status": "gto_ok"
+  },
+  "RC4868310309": {
+    "hand_id": "RC4868310309",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 3,
+    "hero_pos": "BB",
+    "hero_cards": [
+      "Jc",
+      "Js"
+    ],
+    "board": [
+      "7d",
+      "Qd",
+      "8s"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Flop",
+        "action": "Bet",
+        "cards": "Jc Js",
+        "position": "BB",
+        "explanation": "Flop: Hero bet Jc Js (JJ) from BB. In RocketSolver active solution, JJ has 0.0% frequency (Check: 100.0%, Bet: 0.0%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.0,
+          "call": 1.0,
+          "fold": 0.0,
+          "bet": 0.0,
+          "check": 1.0,
+          "bet_small": 0.0,
+          "bet_big": 0.0,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 1387
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$0.60",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "raise",
+        "amount": "$2.55",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "call",
+        "amount": "$2.30",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$1.95",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "bet",
+        "amount": "$2.53",
+        "solver_match": false
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$29.36",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": -508,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868313144": {
+    "hand_id": "RC4868313144",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 4,
+    "hero_pos": "EP",
+    "hero_cards": [
+      "Kh",
+      "Kc"
+    ],
+    "board": [
+      "6c",
+      "Qc",
+      "8c",
+      "Jh",
+      "4c"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Turn",
+        "action": "Bet",
+        "cards": "Tc Ad",
+        "position": "SB",
+        "explanation": "Turn: Villain d048ffb in SB bet $0.25, but in RocketSolver's solution SB has no bet button at this node (only Check is allowed in the GTO tree). Villain took an off-tree action deviating from GTO strategy.",
+        "villain_deviation": true
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "raise",
+        "amount": "$0.75",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "call",
+        "amount": "$0.65",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "call",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 4,
+        "action": "bet",
+        "amount": "$1.13",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "call",
+        "amount": "$1.13",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "call",
+        "amount": "$1.13",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 2,
+        "action": "bet",
+        "amount": "$0.25",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": 1023,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868367650": {
+    "hand_id": "RC4868367650",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 4,
+    "hero_pos": "EP",
+    "hero_cards": [
+      "Kc",
+      "Ah"
+    ],
+    "board": [
+      "3s",
+      "9c",
+      "Ks"
+    ],
+    "marked_for_review": false,
+    "review_reasons": [],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$3.00",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "raise",
+        "amount": "$6.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$3.50",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 4,
+        "action": "bet",
+        "amount": "$5.25",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": 584,
+    "is_reviewed": true,
+    "review_status": "gto_ok"
+  },
+  "RC4868368974": {
+    "hand_id": "RC4868368974",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 1,
+    "hero_pos": "BU",
+    "hero_cards": [
+      "9s",
+      "8s"
+    ],
+    "board": [
+      "Js",
+      "3c",
+      "2s",
+      "Jc",
+      "6c"
+    ],
+    "marked_for_review": false,
+    "review_reasons": [],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "call",
+        "amount": "$0.40",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$1.32",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "call",
+        "amount": "$1.32",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 1,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$5.84",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 5,
+        "action": "call",
+        "amount": "$5.84",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": -766,
+    "is_reviewed": true,
+    "review_status": "gto_ok"
+  },
+  "RC4868369685": {
+    "hand_id": "RC4868369685",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 6,
+    "hero_pos": "CO",
+    "hero_cards": [
+      "Td",
+      "9d"
+    ],
+    "board": [
+      "Ac",
+      "Qd",
+      "5s",
+      "5h"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Flop",
+        "action": "Call",
+        "cards": "Td 9d",
+        "position": "CO",
+        "explanation": "Flop: Hero called Td 9d (T9s) from CO. In RocketSolver active solution, T9s has 0.0% frequency (Fold: 100.0%, Call: 0.0%, Raise: 0.0%). This action deviates significantly from GTO strategy (hand has to be folded). Check ended.",
+        "solver_strategy": {
+          "raise": 0.0,
+          "call": 0.0,
+          "fold": 1.0,
+          "bet": 0.0,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.0,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 1324
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "raise",
+        "amount": "$2.90",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$2.32",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "bet",
+        "amount": "$1.52",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$1.52",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": -442,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868417771": {
+    "hand_id": "RC4868417771",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 6,
+    "hero_pos": "CO",
+    "hero_cards": [
+      "9d",
+      "9c"
+    ],
+    "board": [
+      "Th",
+      "2c",
+      "7s",
+      "Td",
+      "Jc"
+    ],
+    "marked_for_review": false,
+    "review_reasons": [],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$1.73",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$1.15",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$2.01",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$2.01",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 6,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 1,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 6,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$5.71",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 6,
+        "action": "call",
+        "amount": "$5.71",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": -945,
+    "is_reviewed": true,
+    "review_status": "gto_ok"
+  },
+  "RC4868418422": {
+    "hand_id": "RC4868418422",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 1,
+    "hero_pos": "BU",
+    "hero_cards": [
+      "Th",
+      "Ts"
+    ],
+    "board": [
+      "Td",
+      "2h",
+      "3h",
+      "4d",
+      "Ad",
+      "2d",
+      "Jd"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Flop",
+        "action": "Call",
+        "cards": "Th Ts",
+        "position": "BU",
+        "explanation": "Flop: Hero called Th Ts (TT) from BU. In RocketSolver active solution, TT has 0.0% frequency (Fold: 20.4%, Call: 0.0%, Raise: 79.6%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.796,
+          "call": 0.0,
+          "fold": 0.204,
+          "bet": 0.796,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.796,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 113
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "raise",
+        "amount": "$2.60",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$2.02",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "bet",
+        "amount": "$2.65",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$7.25",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "raise",
+        "amount": "$70.05",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$20.85",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": 2969,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868420618": {
+    "hand_id": "RC4868420618",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 2,
+    "hero_pos": "SB",
+    "hero_cards": [
+      "6c",
+      "7c"
+    ],
+    "board": [
+      "4c",
+      "Kc",
+      "6d",
+      "4h",
+      "Qd"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Preflop",
+        "action": "Call",
+        "cards": "6c 7c",
+        "position": "SB",
+        "explanation": "Preflop: Hero called 6c 7c (76s) from SB. In RocketSolver active solution, 76s has 0.0% frequency (Fold: 100.0%, Call: 0.0%, Raise: 0.0%). This action deviates significantly from GTO strategy (hand has to be folded). Check ended.",
+        "solver_strategy": {
+          "raise": 0.0,
+          "call": 0.0,
+          "fold": 1.0,
+          "bet": 0.0,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.0,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 1363
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "raise",
+        "amount": "$0.55",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "call",
+        "amount": "$0.45",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": -529,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868421416": {
+    "hand_id": "RC4868421416",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 6,
+    "hero_pos": "CO",
+    "hero_cards": [
+      "Ad",
+      "Kc"
+    ],
+    "board": [
+      "6d",
+      "Qs",
+      "Td",
+      "Ts",
+      "5h"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Preflop",
+        "action": "Raise",
+        "cards": "Ad Kc",
+        "position": "CO",
+        "explanation": "Preflop: Hero raised Ad Kc (AKo) from CO. In RocketSolver active solution, AKo has 0.0% frequency (Fold: 10.6%, Call: 89.4%, Raise: 0.0%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.0,
+          "call": 0.894,
+          "fold": 0.106,
+          "bet": 0.0,
+          "check": 0.894,
+          "bet_small": 0.0,
+          "bet_big": 0.0,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 1313
+        }
+      },
+      {
+        "street": "Preflop",
+        "action": "Call",
+        "cards": "Ad Kc",
+        "position": "CO",
+        "explanation": "Preflop: Hero called Ad Kc (AKo) from CO. In RocketSolver active solution, AKo has 0.0% frequency (Fold: 23.4%, Call: 0.0%, Raise: 76.6%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.766,
+          "call": 0.0,
+          "fold": 0.234,
+          "bet": 0.766,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.766,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 853
+        }
+      },
+      {
+        "street": "Flop",
+        "action": "Bet",
+        "cards": "--",
+        "position": "EP",
+        "explanation": "Flop: Villain bcb77045 in EP bet $5.18, but in RocketSolver's solution EP has no bet button at this node (only Check is allowed in the GTO tree). Villain took an off-tree action deviating from GTO strategy.",
+        "villain_deviation": true
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "raise",
+        "amount": "$0.55",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "call",
+        "amount": "$0.55",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$2.25",
+        "solver_match": false
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "raise",
+        "amount": "$4.75",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$2.50",
+        "solver_match": false
+      },
+      {
+        "street": "Flop",
+        "seat": 4,
+        "action": "bet",
+        "amount": "$5.18",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": -1511,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868421998": {
+    "hand_id": "RC4868421998",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 1,
+    "hero_pos": "BU",
+    "hero_cards": [
+      "8h",
+      "9h"
+    ],
+    "board": [
+      "4h",
+      "Td",
+      "4d",
+      "Qd",
+      "Kh"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Turn",
+        "action": "Check",
+        "cards": "8h 9h",
+        "position": "BU",
+        "explanation": "Turn: Hero checked 8h 9h (98s) from BU. In RocketSolver active solution, 98s has 0.0% frequency (Check: 0.0%, Bet: 100.0%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 1.0,
+          "call": 0.0,
+          "fold": 0.0,
+          "bet": 1.0,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.935,
+          "all_in": 0.065,
+          "in_range": true,
+          "total_colored_pixels": 214
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "raise",
+        "amount": "$2.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$1.92",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$1.69",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 3,
+        "action": "call",
+        "amount": "$1.69",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 3,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 1,
+        "action": "check",
+        "amount": "",
+        "solver_match": false
+      },
+      {
+        "street": "River",
+        "seat": 3,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$11.28",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 3,
+        "action": "call",
+        "amount": "$11.28",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": -1547,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868422904": {
+    "hand_id": "RC4868422904",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 1,
+    "hero_pos": "BU",
+    "hero_cards": [
+      "As",
+      "Jd"
+    ],
+    "board": [
+      "Kd",
+      "3h",
+      "8d",
+      "6h",
+      "8s"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "River",
+        "action": "Bet",
+        "cards": "--",
+        "position": "CO",
+        "explanation": "River: Villain a2263d30 in CO bet $11.71, but in RocketSolver's solution CO has no bet button at this node (only Check is allowed in the GTO tree). Villain took an off-tree action deviating from GTO strategy.",
+        "villain_deviation": true
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$2.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$2.00",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$2.93",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$2.93",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 6,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 1,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 6,
+        "action": "bet",
+        "amount": "$11.71",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": -543,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868423773": {
+    "hand_id": "RC4868423773",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 6,
+    "hero_pos": "CO",
+    "hero_cards": [
+      "Qd",
+      "Qs"
+    ],
+    "board": [
+      "9d",
+      "6h",
+      "6s",
+      "Th",
+      "Kc"
+    ],
+    "marked_for_review": false,
+    "review_reasons": [],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$2.00",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "raise",
+        "amount": "$6.35",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$4.35",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 4,
+        "action": "bet",
+        "amount": "$6.53",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$18.65",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 4,
+        "action": "call",
+        "amount": "$12.12",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": -2500,
+    "is_reviewed": true,
+    "review_status": "gto_ok"
+  },
+  "RC4868424679": {
+    "hand_id": "RC4868424679",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 1,
+    "hero_pos": "BU",
+    "hero_cards": [
+      "Ad",
+      "As"
+    ],
+    "board": [
+      "9c",
+      "Ks",
+      "Qd",
+      "2h",
+      "5h"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Preflop",
+        "action": "Call",
+        "cards": "Ad As",
+        "position": "BU",
+        "explanation": "Preflop: Hero called Ad As (AA) from BU. In RocketSolver active solution, AA has 0.0% frequency (Fold: 0.0%, Call: 0.0%, Raise: 100.0%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 1.0,
+          "call": 0.0,
+          "fold": 0.0,
+          "bet": 1.0,
+          "check": 0.0,
+          "bet_small": 0.707,
+          "bet_big": 0.292,
+          "all_in": 0.001,
+          "in_range": true,
+          "total_colored_pixels": 1354
+        }
+      },
+      {
+        "street": "Flop",
+        "action": "Call",
+        "cards": "Ad As",
+        "position": "BU",
+        "explanation": "Flop: Hero called Ad As (AA) from BU. In RocketSolver active solution, AA has 0.0% frequency (Fold: 9.7%, Call: 0.0%, Raise: 90.3%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.903,
+          "call": 0.0,
+          "fold": 0.097,
+          "bet": 0.903,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.903,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 155
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "raise",
+        "amount": "$2.04",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$1.46",
+        "solver_match": false
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "bet",
+        "amount": "$1.43",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$4.00",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "raise",
+        "amount": "$6.73",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$2.73",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": 790,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868465528": {
+    "hand_id": "RC4868465528",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 2,
+    "hero_pos": "SB",
+    "hero_cards": [
+      "Ac",
+      "Qh"
+    ],
+    "board": [
+      "Td",
+      "Jh",
+      "4d",
+      "7s",
+      "8s"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "River",
+        "action": "Check",
+        "cards": "Ac Qh",
+        "position": "SB",
+        "explanation": "River: Hero checked Ac Qh (AQo) from SB. In RocketSolver active solution, AQo has 0.0% frequency (Check: 0.0%, Bet: 100.0%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 1.0,
+          "call": 0.0,
+          "fold": 0.0,
+          "bet": 1.0,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.963,
+          "all_in": 0.037,
+          "in_range": true,
+          "total_colored_pixels": 246
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$0.55",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "raise",
+        "amount": "$2.75",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$2.20",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 6,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 2,
+        "action": "bet",
+        "amount": "$4.32",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 6,
+        "action": "call",
+        "amount": "$4.32",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 2,
+        "action": "check",
+        "amount": "",
+        "solver_match": false
+      },
+      {
+        "street": "River",
+        "seat": 6,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": -707,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868466116": {
+    "hand_id": "RC4868466116",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 2,
+    "hero_pos": "SB",
+    "hero_cards": [
+      "As",
+      "Ks"
+    ],
+    "board": [
+      "Tc",
+      "Kc",
+      "2s",
+      "2d",
+      "9d"
+    ],
+    "marked_for_review": false,
+    "review_reasons": [],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "raise",
+        "amount": "$2.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "call",
+        "amount": "$2.00",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 2,
+        "action": "bet",
+        "amount": "$1.74",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "call",
+        "amount": "$1.74",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 2,
+        "action": "bet",
+        "amount": "$7.25",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "call",
+        "amount": "$7.25",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 2,
+        "action": "bet",
+        "amount": "$11.62",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": 1062,
+    "is_reviewed": true,
+    "review_status": "gto_ok"
+  },
+  "RC4868470822": {
+    "hand_id": "RC4868470822",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 3,
+    "hero_pos": "BB",
+    "hero_cards": [
+      "5h",
+      "7d"
+    ],
+    "board": [
+      "4h",
+      "6h",
+      "3h",
+      "5d",
+      "Jd"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Preflop",
+        "action": "Call",
+        "cards": "5h 7d",
+        "position": "BB",
+        "explanation": "Preflop: Hero called 5h 7d (75o) from BB. In RocketSolver active solution, 75o has 0.0% frequency (Fold: 100.0%, Call: 0.0%, Raise: 0.0%). This action deviates significantly from GTO strategy (hand has to be folded). Check ended.",
+        "solver_strategy": {
+          "raise": 0.0,
+          "call": 0.0,
+          "fold": 1.0,
+          "bet": 0.0,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.0,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 1370
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "call",
+        "amount": "$0.25",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": -955,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868471590": {
+    "hand_id": "RC4868471590",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 3,
+    "hero_pos": "BB",
+    "hero_cards": [
+      "As",
+      "7c"
+    ],
+    "board": [
+      "7h",
+      "4s",
+      "7d",
+      "Qc",
+      "Ad"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Preflop",
+        "action": "Raise",
+        "cards": "As 7c",
+        "position": "BB",
+        "explanation": "Preflop: Hero raised As 7c (A7o) from BB. In RocketSolver active solution, A7o has 0.0% frequency (Fold: 100.0%, Call: 0.0%, Raise: 0.0%). This action deviates significantly from GTO strategy (hand has to be folded). Check ended.",
+        "solver_strategy": {
+          "raise": 0.0,
+          "call": 0.0,
+          "fold": 1.0,
+          "bet": 0.0,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.0,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 1325
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "raise",
+        "amount": "$2.50",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": 1828,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868507836": {
+    "hand_id": "RC4868507836",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 4,
+    "hero_pos": "EP",
+    "hero_cards": [
+      "Qh",
+      "Ks"
+    ],
+    "board": [
+      "Qc",
+      "6c",
+      "3c",
+      "2h",
+      "Kh"
+    ],
+    "marked_for_review": false,
+    "review_reasons": [],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "raise",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$0.50",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 4,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$0.45",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 4,
+        "action": "call",
+        "amount": "$0.45",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 4,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$1.69",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 4,
+        "action": "call",
+        "amount": "$1.69",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 4,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 1,
+        "action": "bet",
+        "amount": "$8.45",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 4,
+        "action": "call",
+        "amount": "$8.45",
+        "solver_match": true
+      }
+    ],
+    "hero_net_cents": -1109,
+    "is_reviewed": true,
+    "review_status": "gto_ok"
+  },
+  "RC4868509686": {
+    "hand_id": "RC4868509686",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 6,
+    "hero_pos": "CO",
+    "hero_cards": [
+      "4c",
+      "4h"
+    ],
+    "board": [
+      "Qh",
+      "9d",
+      "9c",
+      "Td",
+      "7d"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Preflop",
+        "action": "Call",
+        "cards": "4c 4h",
+        "position": "CO",
+        "explanation": "Preflop: Hero called 4c 4h (44) from CO. In RocketSolver active solution, 44 has 0.0% frequency (Fold: 100.0%, Call: 0.0%, Raise: 0.0%). This action deviates significantly from GTO strategy (hand has to be folded). Check ended.",
+        "solver_strategy": {
+          "raise": 0.0,
+          "call": 0.0,
+          "fold": 1.0,
+          "bet": 0.0,
+          "check": 0.0,
+          "bet_small": 0.0,
+          "bet_big": 0.0,
+          "all_in": 0.0,
+          "in_range": true,
+          "total_colored_pixels": 1343
+        }
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "raise",
+        "amount": "$2.36",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "call",
+        "amount": "$1.78",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": -711,
+    "is_reviewed": true,
+    "review_status": "review"
+  },
+  "RC4868510973": {
+    "hand_id": "RC4868510973",
+    "variant": "No-Limit Hold'em - Fast-Fold",
+    "poker_site": "GG-Poker",
+    "hero_seat": 5,
+    "hero_pos": "MP",
+    "hero_cards": [
+      "Ac",
+      "Ad"
+    ],
+    "board": [
+      "2c",
+      "6d",
+      "Ts",
+      "Js",
+      "4h"
+    ],
+    "marked_for_review": true,
+    "review_reasons": [
+      {
+        "street": "Turn",
+        "action": "Check",
+        "cards": "Ac Ad",
+        "position": "MP",
+        "explanation": "Turn: Hero checked Ac Ad (AA) from MP. In RocketSolver active solution, AA has 0.5% frequency (Check: 0.5%, Bet: 99.5%). This action deviates from GTO strategy.",
+        "solver_strategy": {
+          "raise": 0.995,
+          "call": 0.005,
+          "fold": 0.0,
+          "bet": 0.995,
+          "check": 0.005,
+          "bet_small": 0.069,
+          "bet_big": 0.879,
+          "all_in": 0.046,
+          "in_range": true,
+          "total_colored_pixels": 952
+        }
+      },
+      {
+        "street": "River",
+        "action": "Raise",
+        "cards": "4c 4s",
+        "position": "BU",
+        "explanation": "River: Villain 49ace39 in BU raise $87.51, but in RocketSolver's solution BU has no raise button at this node (only Check is allowed in the GTO tree). Villain took an off-tree action deviating from GTO strategy.",
+        "villain_deviation": true
+      }
+    ],
+    "street_analyses": [
+      {
+        "street": "Preflop",
+        "seat": 4,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 5,
+        "action": "raise",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 6,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$0.58",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 2,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Preflop",
+        "seat": 3,
+        "action": "fold",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 5,
+        "action": "bet",
+        "amount": "$0.76",
+        "solver_match": true
+      },
+      {
+        "street": "Flop",
+        "seat": 1,
+        "action": "call",
+        "amount": "$0.76",
+        "solver_match": true
+      },
+      {
+        "street": "Turn",
+        "seat": 5,
+        "action": "check",
+        "amount": "",
+        "solver_match": false
+      },
+      {
+        "street": "Turn",
+        "seat": 1,
+        "action": "check",
+        "amount": "",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 5,
+        "action": "bet",
+        "amount": "$4.75",
+        "solver_match": true
+      },
+      {
+        "street": "River",
+        "seat": 1,
+        "action": "raise",
+        "amount": "$87.51",
+        "solver_match": false
+      }
+    ],
+    "hero_net_cents": -2500,
+    "is_reviewed": true,
+    "review_status": "review"
+  }
+}
