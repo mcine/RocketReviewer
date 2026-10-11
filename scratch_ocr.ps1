@@ -12,7 +12,7 @@ function Await($op, $type) {
     return $task.Result
 }
 
-$path = (Resolve-Path 'scratch_settings_view.png').Path
+$path = (Resolve-Path 'legend_crop.png').Path
 $file = Await ([Windows.Storage.StorageFile]::GetFileFromPathAsync($path)) ([Windows.Storage.StorageFile])
 $stream = Await ($file.OpenAsync([Windows.Storage.FileAccessMode]::Read)) ([Windows.Storage.Streams.IRandomAccessStream])
 $decoder = Await ([Windows.Graphics.Imaging.BitmapDecoder]::CreateAsync($stream)) ([Windows.Graphics.Imaging.BitmapDecoder])

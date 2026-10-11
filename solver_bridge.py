@@ -608,23 +608,49 @@ class RocketSolverBridge:
 
         counts = {k: 0 for k in candidate_keys}
 
+        def classify_pixel(r: int, g: int, b: int) -> Optional[str]:
+            # Filter out dark cell backgrounds (RocketSolver background is dark blue/slate, max < 95)
+            if max(r, g, b) < 95:
+                return None
+            # Filter out white and light-gray text inside cell ("KK", "AKs", etc.)
+            if min(r, g, b) > 165:
+                return None
+            # Filter out grayish / desaturated anti-aliasing text edges
+            if max(r, g, b) - min(r, g, b) < 25 and min(r, g, b) > 105:
+                return None
+
+            # Primary: Dominant channel classification
+            if g > r + 15 and g > b + 15:
+                return "check" if "check" in candidate_keys else None
+            elif facing_bet and r > g + 25 and r > b + 15:
+                return "fold" if "fold" in candidate_keys else None
+            elif b > r + 15 and b > g + 15:
+                if "all_in" in candidate_keys and r > 60 and g < 60 and b > 140:
+                    return "all_in"
+                elif "bet_small" in candidate_keys and g > 90:
+                    return "bet_small"
+                elif "bet_big" in candidate_keys:
+                    return "bet_big"
+                return "bet_small" if "bet_small" in candidate_keys else None
+            else:
+                # Fallback to calibrated swatches with strict threshold (< 60)
+                best_k = None
+                best_d = 999999.0
+                for k, swatch in candidate_swatches.items():
+                    d = math.dist((r, g, b), swatch)
+                    if d < best_d:
+                        best_d = d
+                        best_k = k
+                if best_d < 60 and best_k:
+                    return best_k
+            return None
+
         for y in range(y_start, y_end):
             for x in range(x_start, x_end):
                 rgb = im.getpixel((x, y))[:3]
-                # Filter out dark cell backgrounds and bright white hand text
-                if max(rgb) < 55 or min(rgb) > 195:
-                    continue
-
-                best_key = None
-                best_dist = 999999.0
-                for k, swatch in candidate_swatches.items():
-                    d = math.dist(rgb, swatch)
-                    if d < best_dist:
-                        best_dist = d
-                        best_key = k
-
-                if best_dist < 130 and best_key:
-                    counts[best_key] += 1
+                res = classify_pixel(rgb[0], rgb[1], rgb[2])
+                if res:
+                    counts[res] += 1
 
         total = sum(counts.values())
         if total < 20:
@@ -636,17 +662,9 @@ class RocketSolverBridge:
                 for y in range(y_start, y_end):
                     for x in range(x_start, x_end):
                         rgb = im_retry.getpixel((x, y))[:3]
-                        if max(rgb) < 55 or min(rgb) > 195:
-                            continue
-                        best_key = None
-                        best_dist = 999999.0
-                        for k, swatch in candidate_swatches.items():
-                            d = math.dist(rgb, swatch)
-                            if d < best_dist:
-                                best_dist = d
-                                best_key = k
-                        if best_dist < 130 and best_key:
-                            counts_retry[best_key] += 1
+                        res = classify_pixel(rgb[0], rgb[1], rgb[2])
+                        if res:
+                            counts_retry[res] += 1
                 if sum(counts_retry.values()) >= 20:
                     counts = counts_retry
                     total = sum(counts.values())
@@ -807,6 +825,8 @@ class RocketSolverBridge:
 
         street = "Preflop"
         facing_bet = True
+        street_raises = 1  # Preflop BB counts as 1st bet
+        last_bettor = {"pos": "BB", "amt": "", "action": "Big Blind", "short": "Big Blind"}
         blunder_found = False
 
         board_cards_inputted = 0
@@ -821,6 +841,8 @@ class RocketSolverBridge:
             if t == "deal_flop":
                 street = "Flop"
                 facing_bet = False
+                street_raises = 0
+                last_bettor = None
                 if on_action:
                     on_action(f"Dealing Flop: {' '.join(act.cards)}")
                 if self.sleep_interruptible(0.5, cancel_check):
@@ -838,6 +860,8 @@ class RocketSolverBridge:
             elif t == "deal_turn":
                 street = "Turn"
                 facing_bet = False
+                street_raises = 0
+                last_bettor = None
                 if on_action:
                     on_action(f"Dealing Turn: {' '.join(act.cards)}")
                 if self.sleep_interruptible(0.5, cancel_check):
@@ -855,6 +879,8 @@ class RocketSolverBridge:
             elif t == "deal_river":
                 street = "River"
                 facing_bet = False
+                street_raises = 0
+                last_bettor = None
                 if on_action:
                     on_action(f"Dealing River: {' '.join(act.cards)}")
                 if self.sleep_interruptible(0.5, cancel_check):
@@ -901,6 +927,65 @@ class RocketSolverBridge:
                                 if self.sleep_interruptible(visual_delay, cancel_check):
                                     return cancel_result()
 
+                # Determine human-friendly action terminology and context
+                if street == "Preflop":
+                    if t == "raise":
+                        if street_raises == 1:
+                            action_verb = f"open raised to {amt_str}".strip() if amt_str else "open raised"
+                            action_badge = f"Open Raise {amt_str}".strip()
+                        elif street_raises == 2:
+                            action_verb = f"3-bet raised to {amt_str}".strip() if amt_str else "3-bet raised"
+                            action_badge = f"3-Bet {amt_str}".strip()
+                        elif street_raises == 3:
+                            action_verb = f"4-bet raised to {amt_str}".strip() if amt_str else "4-bet raised"
+                            action_badge = f"4-Bet {amt_str}".strip()
+                        else:
+                            action_verb = f"{street_raises+1}-bet raised to {amt_str}".strip() if amt_str else f"{street_raises+1}-bet raised"
+                            action_badge = f"{street_raises+1}-Bet {amt_str}".strip()
+                    elif t == "call":
+                        action_verb = f"called {amt_str}".strip() if amt_str else "called"
+                        action_badge = f"Call {amt_str}".strip()
+                    elif t == "check":
+                        action_verb = "checked"
+                        action_badge = "Check"
+                    elif t == "fold":
+                        action_verb = "folded"
+                        action_badge = "Fold"
+                else:
+                    if t in ("bet", "raise"):
+                        if street_raises == 0:
+                            action_verb = f"bet {amt_str}".strip() if amt_str else "bet"
+                            action_badge = f"Bet {amt_str}".strip()
+                        elif street_raises == 1:
+                            action_verb = f"raised to {amt_str}".strip() if amt_str else "raised"
+                            action_badge = f"Raise {amt_str}".strip()
+                        elif street_raises == 2:
+                            action_verb = f"3-bet raised to {amt_str}".strip() if amt_str else "3-bet raised"
+                            action_badge = f"3-Bet {amt_str}".strip()
+                        else:
+                            action_verb = f"{street_raises+1}-bet raised to {amt_str}".strip() if amt_str else f"{street_raises+1}-bet raised"
+                            action_badge = f"{street_raises+1}-Bet {amt_str}".strip()
+                    elif t == "call":
+                        action_verb = f"called {amt_str}".strip() if amt_str else "called"
+                        action_badge = f"Call {amt_str}".strip()
+                    elif t == "check":
+                        action_verb = "checked"
+                        action_badge = "Check"
+                    elif t == "fold":
+                        action_verb = "folded"
+                        action_badge = "Fold"
+
+                # Facing context description
+                if last_bettor and (facing_bet or street == "Preflop"):
+                    if last_bettor.get("action") == "Big Blind":
+                        facing_desc = "unopened pot"
+                    else:
+                        facing_desc = f"facing {last_bettor['pos']}'s {last_bettor['amt']} {last_bettor['short']}".replace("  ", " ").strip()
+                elif not facing_bet:
+                    facing_desc = "first to act" if street != "Preflop" else "unopened pot"
+                else:
+                    facing_desc = ""
+
                 if is_hero:
                     strat = self.get_live_hand_strategy(canon_hand, facing_bet=facing_bet)
                     in_range = strat.get("in_range", True)
@@ -932,8 +1017,9 @@ class RocketSolverBridge:
                     elif t == "fold":
                         freq = fold_pct
 
-                    past_tenses = {"raise": "raised", "bet": "bet", "call": "called", "check": "checked", "fold": "folded"}
-                    act_verb = past_tenses.get(t, f"{t}ed")
+                    act_summary = f"{action_verb} with {card_str} ({canon_hand}) from {hero_pos}"
+                    if facing_desc:
+                        act_summary += f" ({facing_desc})"
 
                     # Hand has to be folded ONLY if facing a bet and fold is required
                     hand_has_to_be_folded = facing_bet and (fold_pct >= 0.95 or (call_pct < 0.05 and raise_pct < 0.05))
@@ -943,14 +1029,14 @@ class RocketSolverBridge:
                         if hand_has_to_be_folded and t != "fold":
                             # Hand-ending mistake: Hero had to fold. The check ends here.
                             exp = (
-                                f"{street}: Hero {act_verb} {card_str} ({canon_hand}) from {hero_pos}. "
+                                f"{street}: Hero {act_summary}. "
                                 f"In RocketSolver active solution, {canon_hand} has {freq*100:.1f}% frequency "
                                 f"({strat_desc}). "
                                 f"This action deviates significantly from GTO strategy (hand has to be folded). Check ended."
                             )
                             review_reasons.append({
                                 "street": street,
-                                "action": t.capitalize(),
+                                "action": action_badge,
                                 "cards": card_str,
                                 "position": hero_pos,
                                 "explanation": exp,
@@ -970,14 +1056,14 @@ class RocketSolverBridge:
                         else:
                             # Non hand-ending mistake (e.g. wrong raise size, call vs raise, bet vs check)
                             exp = (
-                                f"{street}: Hero {act_verb} {card_str} ({canon_hand}) from {hero_pos}. "
+                                f"{street}: Hero {act_summary}. "
                                 f"In RocketSolver active solution, {canon_hand} has {freq*100:.1f}% frequency "
                                 f"({strat_desc}). "
                                 f"This action deviates from GTO strategy."
                             )
                             review_reasons.append({
                                 "street": street,
-                                "action": t.capitalize(),
+                                "action": action_badge,
                                 "cards": card_str,
                                 "position": hero_pos,
                                 "explanation": exp,
@@ -1008,9 +1094,16 @@ class RocketSolverBridge:
                         if t == "fold":
                             break
 
-                    # Update facing_bet after Hero's action
+                    # Update bet state after Hero's action
                     if t in ("bet", "raise"):
+                        street_raises += 1
                         facing_bet = True
+                        last_bettor = {
+                            "pos": hero_pos,
+                            "amt": amt_str,
+                            "action": action_badge,
+                            "short": action_badge.split()[0]
+                        }
 
                     # Perform Hero's action so RocketSolver tree advances and user sees full hand replay
                     self.click_action(t)
@@ -1020,14 +1113,14 @@ class RocketSolverBridge:
                 else:
                     v_name = hand.players.get(act.seat).name if act.seat and act.seat in hand.players else f"Villain {act.seat}"
                     if on_action:
-                        on_action(f"Villain {v_name} ({pos}) {t} {amt_str}")
+                        on_action(f"Villain {v_name} ({pos}) {action_verb}")
 
                     # Check available action buttons in RocketSolver for villain
                     btns_available = self.detect_action_buttons()
                     # If villain bets/raises but only 1 button (check) exists in the solver tree:
                     if t in ("bet", "raise") and len(btns_available) <= 1:
                         v_issue_exp = (
-                            f"{street}: Villain {v_name} in {pos} {t} {amt_str}, but in RocketSolver's solution "
+                            f"{street}: Villain {v_name} in {pos} {action_verb}, but in RocketSolver's solution "
                             f"{pos} has no {t} button at this node (only Check is allowed in the GTO tree). "
                             f"Villain took an off-tree action deviating from GTO strategy."
                         )
@@ -1039,7 +1132,7 @@ class RocketSolverBridge:
 
                         review_reasons.append({
                             "street": street,
-                            "action": t.capitalize(),
+                            "action": action_badge,
                             "cards": v_cards,
                             "position": pos,
                             "explanation": v_issue_exp,
@@ -1054,9 +1147,6 @@ class RocketSolverBridge:
                         })
                         if on_action:
                             on_action(f"Villain deviation: {v_issue_exp}")
-                        # Villain made an action that does not exist in RocketSolver's tree.
-                        # Do NOT click Check! Tree cannot proceed along this off-tree branch.
-                        # Stop stepping here so RocketSolver remains at this node for inspection.
                         break
                     else:
                         street_analyses.append({
@@ -1068,7 +1158,14 @@ class RocketSolverBridge:
                         })
 
                     if t in ("bet", "raise"):
+                        street_raises += 1
                         facing_bet = True
+                        last_bettor = {
+                            "pos": pos,
+                            "amt": amt_str,
+                            "action": action_badge,
+                            "short": action_badge.split()[0]
+                        }
                     self.click_action(t)
                     if self.sleep_interruptible(visual_delay, cancel_check):
                         return cancel_result()
